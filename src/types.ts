@@ -1,5 +1,6 @@
 export interface ReviewerConcept {
   exactWord: string;
+  sourceMeaning?: string;
   mnemonic: string;
   elementaryExplanation: string;
   example: string;
@@ -30,9 +31,9 @@ export interface StudentAccount {
   name: string;
   email: string;
   password?: string;
-  grade: string; // e.g. "Junior Undergraduate", "Senior Undergraduate"
-  major: string; // e.g. "Computer Science", "Biochemistry"
-  university: string; // e.g. "Stamford University", "State College"
+  grade: string;
+  major: string;
+  university: string;
   credits: number;
   createdDate: string;
 }

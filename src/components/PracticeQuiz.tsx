@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QuizItem } from "../types";
-import { CheckCircle, XCircle, Award, RefreshCw, Star, Info } from "lucide-react";
+import { Award, CheckCircle, Info, RefreshCw, XCircle } from "lucide-react";
 
 interface PracticeQuizProps {
   quiz: QuizItem[];
@@ -14,14 +14,14 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
 
   if (!quiz || quiz.length === 0) {
     return (
-      <div class="text-center p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-        <p class="text-slate-500">No practice questions available for this reviewer.</p>
+      <div className="text-center p-6 bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
+        <p className="text-slate-500 text-sm">No practice questions available for this reviewer.</p>
       </div>
     );
   }
 
   const handleSelectOption = (questionIndex: number, option: string) => {
-    if (submitted[questionIndex]) return; // locked once answered
+    if (submitted[questionIndex]) return;
     setSelectedAnswers((prev) => ({ ...prev, [questionIndex]: option }));
   };
 
@@ -30,16 +30,9 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
     if (!selected) return;
 
     setSubmitted((prev) => ({ ...prev, [questionIndex]: true }));
-    
-    // Check if correct
-    const isCorrect = selected === quiz[questionIndex].answer;
-    if (isCorrect) {
+    if (selected === quiz[questionIndex].answer) {
       setScore((prev) => prev + 1);
     }
-  };
-
-  const handleFinishQuiz = () => {
-    setQuizFinished(true);
   };
 
   const handleResetQuiz = () => {
@@ -50,20 +43,19 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
   };
 
   return (
-    <div id="practice-quiz-panel" class="max-w-xl mx-auto py-4 space-y-8">
-      {/* Quiz Title Banner */}
-      <div class="bg-indigo-600 text-white rounded-2xl p-6 shadow-sm flex items-center justify-between">
+    <div id="practice-quiz-panel" className="max-w-3xl mx-auto py-3 space-y-6">
+      <div className="bg-[#1F2933] text-white rounded-lg p-5 shadow-sm flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h4 class="text-lg font-bold font-display">Exam Simulator Challenge</h4>
-          <p class="text-xs text-indigo-100 mt-1">Let's check how ready you are for the real exam!</p>
+          <h4 className="text-lg font-black tracking-normal">Practice Quiz</h4>
+          <p className="text-xs text-teal-100 mt-1">Answer each item, check feedback, then finish for a score.</p>
         </div>
-        <div class="p-3 bg-white/10 rounded-xl text-yellow-300">
-          <Star class="w-6 h-6 fill-yellow-300 animate-spin-slow" />
+        <div className="rounded-lg border border-white/10 bg-white/10 px-4 py-2 text-sm font-black">
+          {score} / {quiz.length}
         </div>
       </div>
 
       {!quizFinished ? (
-        <div class="space-y-6">
+        <div className="space-y-4">
           {quiz.map((item, qIdx) => {
             const hasSubmitted = submitted[qIdx];
             const isSelected = selectedAnswers[qIdx] !== undefined;
@@ -71,67 +63,67 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
             const isAnswerCorrect = chosen === item.answer;
 
             return (
-              <div 
-                key={qIdx} 
-                className={`p-5 sm:p-6 bg-white rounded-2xl border-2 transition-all duration-200 ${
-                  hasSubmitted 
-                    ? isAnswerCorrect 
-                      ? "border-emerald-200 bg-emerald-50/10" 
-                      : "border-rose-200 bg-rose-50/10"
-                    : "border-slate-100"
+              <div
+                key={qIdx}
+                className={`p-4 sm:p-5 rounded-lg border transition-colors duration-200 ${
+                  hasSubmitted
+                    ? isAnswerCorrect
+                      ? "border-emerald-200 bg-emerald-50/70"
+                      : "border-rose-200 bg-rose-50/70"
+                    : "border-slate-200 bg-white"
                 }`}
               >
-                <div class="flex gap-2 items-start">
-                  <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold mt-0.5">
+                <div className="flex gap-3 items-start">
+                  <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-md bg-[#EEF4EF] text-[#2F5D50] text-xs font-black mt-0.5">
                     {qIdx + 1}
                   </span>
-                  <h5 class="font-semibold text-slate-800 text-sm sm:text-base">
+                  <h5 className="font-bold text-[#1F2933] text-sm sm:text-base leading-6">
                     {item.question}
                   </h5>
                 </div>
 
-                {/* Multiple choice selections */}
-                <div class="mt-4 grid grid-cols-1 gap-2.5">
+                <div className="mt-4 grid grid-cols-1 gap-2">
                   {item.options.map((opt, oIdx) => {
                     const isOptionChosen = chosen === opt;
                     const isOptionCorrect = opt === item.answer;
-                    
-                    let buttonStyle = "border-slate-100 hover:bg-slate-50 text-slate-700";
+
+                    let buttonStyle = "border-slate-200 hover:border-[#2F5D50]/50 hover:bg-[#F8FAFC] text-slate-700";
                     if (isOptionChosen) {
-                      buttonStyle = "border-indigo-600 bg-indigo-50/50 text-indigo-900 font-medium";
+                      buttonStyle = "border-[#2F5D50] bg-[#EEF4EF] text-[#1F2933] font-bold";
                     }
                     if (hasSubmitted) {
                       if (isOptionCorrect) {
-                        buttonStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-medium";
+                        buttonStyle = "border-emerald-500 bg-emerald-50 text-emerald-950 font-bold";
                       } else if (isOptionChosen) {
-                        buttonStyle = "border-rose-500 bg-rose-50 text-rose-900";
+                        buttonStyle = "border-rose-500 bg-rose-50 text-rose-950";
                       } else {
-                        buttonStyle = "border-slate-100 text-slate-400 opacity-60 pointer-events-none";
+                        buttonStyle = "border-slate-200 text-slate-400 opacity-60 pointer-events-none";
                       }
                     }
 
                     return (
                       <button
                         key={oIdx}
+                        type="button"
                         disabled={hasSubmitted}
                         onClick={() => handleSelectOption(qIdx, opt)}
-                        className={`w-full text-left p-3.5 rounded-xl border-2 text-xs sm:text-sm transition-all focus:outline-none flex justify-between items-center ${buttonStyle}`}
+                        className={`w-full cursor-pointer text-left p-3 rounded-lg border text-xs sm:text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#2F5D50] flex justify-between gap-3 items-center disabled:cursor-default ${buttonStyle}`}
                       >
                         <span>{opt}</span>
-                        {hasSubmitted && isOptionCorrect && <CheckCircle class="w-4 h-4 text-emerald-500 flex-shrink-0" />}
-                        {hasSubmitted && isOptionChosen && !isOptionCorrect && <XCircle class="w-4 h-4 text-rose-500 flex-shrink-0" />}
+                        {hasSubmitted && isOptionCorrect && <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />}
+                        {hasSubmitted && isOptionChosen && !isOptionCorrect && <XCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />}
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Check action item */}
-                <div class="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between">
                   <div>
                     {!hasSubmitted && isSelected && (
                       <button
+                        type="button"
                         onClick={() => handleVerifyAnswer(qIdx)}
-                        class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition"
+                        className="px-4 py-2 text-xs font-bold text-white bg-[#2F5D50] hover:bg-[#254A40] rounded-lg transition-colors duration-200 cursor-pointer"
                       >
                         Check Answer
                       </button>
@@ -139,19 +131,18 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
                   </div>
 
                   {hasSubmitted && (
-                    <div className={`text-xs flex items-center gap-1.5 font-semibold ${isAnswerCorrect ? "text-emerald-700" : "text-rose-700"}`}>
-                      {isAnswerCorrect ? "Correct!" : "Oops! Incorrect"}
+                    <div className={`text-xs flex items-center gap-1.5 font-black ${isAnswerCorrect ? "text-emerald-700" : "text-rose-700"}`}>
+                      {isAnswerCorrect ? "Correct" : "Incorrect"}
                     </div>
                   )}
                 </div>
 
-                {/* Accessible explanation display */}
                 {hasSubmitted && (
-                  <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100 flex gap-2">
-                    <Info class="w-4.5 h-4.5 text-indigo-500 flex-shrink-0 mt-0.5" />
+                  <div className="mt-4 p-4 bg-white/70 rounded-lg border border-slate-200 flex gap-2">
+                    <Info className="w-4 h-4 text-[#2F5D50] flex-shrink-0 mt-0.5" />
                     <div>
-                      <span class="text-[10px] font-mono text-slate-400 font-bold block uppercase mb-0.5">Lesson Analogy</span>
-                      <p class="text-xs text-slate-600 leading-relaxed">
+                      <span className="text-[10px] font-mono text-slate-500 font-bold block uppercase mb-0.5">Explanation</span>
+                      <p className="text-xs text-slate-700 leading-relaxed">
                         {item.explanation}
                       </p>
                     </div>
@@ -161,52 +152,51 @@ export default function PracticeQuiz({ quiz }: PracticeQuizProps) {
             );
           })}
 
-          {/* Action to complete */}
-          <div class="pt-2 text-center">
+          <div className="pt-2 text-center">
             <button
-              onClick={handleFinishQuiz}
-              class="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow shadow-indigo-100 transition"
+              type="button"
+              onClick={() => setQuizFinished(true)}
+              className="w-full sm:w-auto px-8 py-3 bg-[#B45309] hover:bg-[#92400E] text-white font-bold rounded-lg shadow-sm transition-colors duration-200 cursor-pointer"
             >
-              Finish & See Total Grade
+              Finish & See Score
             </button>
           </div>
         </div>
       ) : (
-        /* Quiz Summary Screen */
-        <div id="quiz-completion-scoreboard" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center space-y-6">
-          <div class="w-20 h-20 bg-indigo-50 mx-auto rounded-full flex items-center justify-center text-indigo-600">
-            <Award class="w-10 h-10 animate-bounce" />
+        <div id="quiz-completion-scoreboard" className="bg-white p-8 rounded-lg border border-teal-900/10 shadow-sm text-center space-y-6">
+          <div className="w-16 h-16 bg-[#EEF4EF] mx-auto rounded-lg flex items-center justify-center text-[#2F5D50]">
+            <Award className="w-8 h-8" />
           </div>
 
-          <div class="space-y-2">
-            <h5 class="text-2xl font-bold font-display text-slate-900">Quiz Completed!</h5>
-            <p class="text-sm text-slate-500">Awesome job studying! Here is how you did:</p>
+          <div className="space-y-2">
+            <h5 className="text-2xl font-black text-[#1F2933]">Quiz Complete</h5>
+            <p className="text-sm text-slate-500">Your recall score for this reviewer:</p>
           </div>
 
-          {/* Large Scoring Block */}
-          <div class="inline-block px-8 py-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
-            <div class="text-4xl sm:text-5xl font-black font-display text-indigo-700">
-              {score} <span class="text-2xl font-normal text-indigo-400">/ {quiz.length}</span>
+          <div className="inline-block px-8 py-4 bg-[#F7F3EA] border border-teal-900/10 rounded-lg">
+            <div className="text-4xl sm:text-5xl font-black text-[#2F5D50]">
+              {score} <span className="text-2xl font-normal text-slate-400">/ {quiz.length}</span>
             </div>
-            <div class="text-xs font-mono text-indigo-600 mt-1 uppercase font-bold tracking-wider">
-              Score Grade
+            <div className="text-xs font-mono text-[#2F5D50] mt-1 uppercase font-bold tracking-wider">
+              Score
             </div>
           </div>
 
-          <p class="text-sm text-slate-600 italic px-4 leading-relaxed">
-            {score === quiz.length 
-              ? "Flawless victory! You are fully prepared to secure top scores in this exam!" 
-              : score >= Math.ceil(quiz.length * 0.7) 
-                ? "Great work! You fully grasp the core definitions. Let's do a quick reread on missed concepts and you are safe!"
-                : "Good effort! Keep practicing using the double-sided flashcards and you will scale through with flying colors!"}
+          <p className="text-sm text-slate-600 px-4 leading-relaxed">
+            {score === quiz.length
+              ? "Strong recall. Keep the flashcards active so this stays fresh."
+              : score >= Math.ceil(quiz.length * 0.7)
+                ? "Good command of the core ideas. Revisit the missed explanations once."
+                : "Keep practicing with the dictionary and flashcards before trying again."}
           </p>
 
-          <div class="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
             <button
+              type="button"
               onClick={handleResetQuiz}
-              class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center justify-center gap-1.5"
+              className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors duration-200 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <RefreshCw class="w-4 h-4" /> Try Again
+              <RefreshCw className="w-4 h-4" /> Try Again
             </button>
           </div>
         </div>

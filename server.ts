@@ -62,10 +62,11 @@ Your task is to take highly advanced, complex undergraduate-level material from 
 
 RULES:
 1. Exact Terms: Every key concept/word must match the exact term in the lesson plan or collegiate material word-for-word. Do not alter spellings, equations, or formal names.
-2. High-Impact Mnemonics: Provide a highly memorable memory aid, clever wordplay, acronym, visualization, or association to help the undergraduate student instantly recall this complex term or formula under high exam stress.
+2. Source Meaning: For every key concept, include the exact definition, meaning, or closest explanatory wording from the PDF/source material. Preserve source wording as closely as possible and do not turn this field into an analogy.
+3. High-Impact Mnemonics: Provide a highly memorable memory aid, clever wordplay, acronym, visualization, or association to help the undergraduate student instantly recall this complex term or formula under high exam stress.
 3. Accessible Clarity: Explain the core mechanism of the collegiate concept utilizing crystal-clear, straightforward analogies that are accessible to anyone, including adult learners whose highest educational background is elementary school. Avoid overly dense academic jargon, but maintain a respectful, mature tone—never childish, and never treat the user as a kid.
-4. Real-World Application: Add one relatable day-to-day real-world example explaining this concept in a common household, workplace, or physical context.
-5. Create a practice quiz with 3 to 5 multiple-choice questions testing these collegiate terms in a standard exam simulator manner.`;
+5. Real-World Application: Add one relatable day-to-day real-world example explaining this concept in a common household, workplace, or physical context.
+6. Create a practice quiz with 3 to 5 multiple-choice questions testing these collegiate terms in a standard exam simulator manner.`;
 
       const prompt = `Review this undergraduate lesson plan for the upcoming college exam "${examName}". Create an ultra-clear collegiate review sheet adjusted for "${level}".
 
@@ -74,7 +75,7 @@ Here is the lesson plan text extracted from the PDF:
 ${lessonPlanMarkdown}
 ---
 
-Generate the reviewer in JSON format conforming exactly to the response schema. Make sure undergraduate-level concepts are listed exactly as written in the text, while their explanations are extremely digestible and clear.`;
+Generate the reviewer in JSON format conforming exactly to the response schema. Make sure undergraduate-level concepts are listed exactly as written in the text. For sourceMeaning, use the exact meaning or closest definition from the PDF/source text. For elementaryExplanation, make the explanation extremely digestible and clear.`;
 
       // Define schema for JSON output
       const responseSchema = {
@@ -93,6 +94,10 @@ Generate the reviewer in JSON format conforming exactly to the response schema. 
                   type: Type.STRING,
                   description: "The precise keyword, concept name, vocabulary word, or historical fact from the lesson plan.",
                 },
+                sourceMeaning: {
+                  type: Type.STRING,
+                  description: "The exact definition, meaning, or closest explanatory wording for this term from the PDF/source material. Preserve source wording as closely as possible. Do not use an analogy here.",
+                },
                 mnemonic: {
                   type: Type.STRING,
                   description: "A clever, catchy mnemonic device or memory trigger for quick exam recall.",
@@ -106,7 +111,7 @@ Generate the reviewer in JSON format conforming exactly to the response schema. 
                   description: "An easy everyday example that adults can relate to in a household or workplace context.",
                 },
               },
-              required: ["exactWord", "mnemonic", "elementaryExplanation", "example"],
+              required: ["exactWord", "sourceMeaning", "mnemonic", "elementaryExplanation", "example"],
             },
             description: "Array of extracted lesson keywords and helper details.",
           },

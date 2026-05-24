@@ -10,83 +10,233 @@ import QuickStartLanding from "./components/QuickStartLanding";
 import FlashcardViewer from "./components/FlashcardViewer";
 import PracticeQuiz from "./components/PracticeQuiz";
 import { 
-  User, 
-  Plus, 
-  UserCheck, 
   CreditCard, 
   FileText, 
   Sparkles, 
   Loader2, 
-  FileCheck, 
-  Clock, 
   Search, 
   History, 
   HelpCircle, 
-  Share2, 
   Check, 
   ChevronRight, 
   BookOpen, 
   AlertTriangle,
   Lightbulb,
   GraduationCap,
-  Sparkle
+  CloudUpload,
+  LayoutDashboard,
+  NotebookTabs,
+  WalletCards,
+  LogOut,
+  Trash2,
+  WandSparkles,
+  ClipboardCheck,
+  Target,
+  ShieldCheck
 } from "lucide-react";
 
-// Demo review content for instant try-out if they don't upload a PDF (Undergraduate Level)
+const DEMO_ACCOUNT_EMAIL = (import.meta.env.VITE_DEMO_ACCOUNT_EMAIL || "").trim();
+const DEMO_ACCOUNT_PASSWORD = (import.meta.env.VITE_DEMO_ACCOUNT_PASSWORD || "").trim();
+
+const DEMO_STUDENT: StudentAccount = {
+  id: "student-demo",
+  name: "Jane Doe",
+  email: DEMO_ACCOUNT_EMAIL || "demo-session@reviewstack.local",
+  password: DEMO_ACCOUNT_PASSWORD || undefined,
+  grade: "Junior Undergraduate",
+  major: "Biomedical Science",
+  university: "Stamford University",
+  credits: 45,
+  createdDate: new Date().toISOString().split("T")[0],
+};
+
 const MOCK_DEMO_GUIDE: StudyGuide = {
   id: "demo-guide-123",
-  title: "CS 101: Algorithmic Complexity (Big O Notation) Core Review",
+  title: "CS 101: Algorithmic Complexity Core Review",
   examName: "Computer Science Exam 1",
-  level: "Accessible Simplification (Basic Schooling Clarity)",
-  summary: "Algorithmic Complexity defines how computer operations scale when the workload goes up. It is similar to predicting how long it takes to wash dishes or catalog folders as the pile grows larger!",
+  level: "Accessible Simplification",
+  summary:
+    "Algorithmic complexity describes how computer operations scale as the workload grows. It helps you compare whether a process stays manageable or becomes too slow when the input gets larger.",
   concepts: [
     {
       exactWord: "Big O Notation",
-      mnemonic: "Big O = Big Obstacle! The absolute WORST case duration for your workload loop!",
-      elementaryExplanation: "Imagine you are looking for a specific paper invoice in a filing cabinet. In the worst-case scenario, you have to shift through every single folder until finding it in the absolute last slot. Big O notation is a simple mathematical mathematical shorthand used to describe how many total operations are needed in that absolute worst-case scenario as the archive scales.",
-      example: "If checking a stack of N documents one-by-one by hand, the longest lookup time is directly proportional to N. That's described as O(N) linear complexity."
+      sourceMeaning: "Complexity analysis evaluates how runtime or memory requirements scale with input size.",
+      mnemonic: "Big O = Big Obstacle: the upper limit you prepare for.",
+      elementaryExplanation:
+        "Big O is a shorthand for describing how much work an algorithm may need as the input grows. It focuses on the pattern of growth rather than the exact seconds on a clock.",
+      example:
+        "Searching a stack of N papers one by one takes longer as the stack grows, so the work grows in a straight line.",
     },
     {
       exactWord: "Recursion",
-      mnemonic: "Recursion = Re-Running! Tasks nesting inside themselves until hitting a stop code!",
-      elementaryExplanation: "Recursion is when a process refers back to itself to solve smaller pieces of the exact same problem. Think of it like peeling an onion layer by layer, or drilling down through successive physical templates: each layer demands the same action until you reach the core (the base case) where the task is successfully solved.",
-      example: "A program that calculates your family tree by looking at your parents, then their parents, and so on, until reaching the oldest single ancestor record."
+      sourceMeaning: "A function references itself to solve smaller versions of a problem. Every recursion needs a base case.",
+      mnemonic: "Recursion = repeat the same task on a smaller piece.",
+      elementaryExplanation:
+        "Recursion is when a process solves a problem by calling itself on smaller versions of that same problem until it reaches a stopping point.",
+      example:
+        "Opening nested folders until you reach the final document follows the same action repeatedly until there is nothing left to open.",
     },
     {
       exactWord: "Hash Collision",
-      mnemonic: "Collision = Crash! Two files getting assigned the exact same parking slot!",
-      elementaryExplanation: "Imagine a sorting system with filing slots labeled 0 to 9. You organize papers based on the last digit of their numerical ID. If you have two different documents whose IDs end in 5, they both try to slot into box 5! A collision is when two distinct pieces of information map to the exact same lookup indicator.",
-      example: "Two employees sharing the exact same birthday in an office, prompting the filing clerk to store both of their background sheets inside the same physical folder tab."
-    }
+      sourceMeaning: "Hash tables can map distinct keys to identical hash indices.",
+      mnemonic: "Collision = two items assigned the same slot.",
+      elementaryExplanation:
+        "A hash collision happens when two different pieces of information point to the same storage location, so the system needs a way to handle both.",
+      example:
+        "Two students can have the same locker number by mistake, forcing the school to resolve where each person should store their books.",
+    },
   ],
   quiz: [
     {
-      question: "What does Big O Notation represent in software design?",
+      question: "What does Big O Notation describe?",
       options: [
-        "The absolute worst-case mathematical runtime limit as inputs scale",
-        "The total monetary cost of running a cloud computing container",
-        "The size of the physical computer screen needed to display an application",
-        "The font size used when writing complex database index queries"
+        "How algorithm work grows as input size increases",
+        "The visual size of a program window",
+        "The price of running a server",
+        "The number of students in a course",
       ],
-      answer: "The absolute worst-case mathematical runtime limit as inputs scale",
-      explanation: "Excellent! Big O measures the upper bound of process steps as inputs grow, outlining the worst-case scenario."
+      answer: "How algorithm work grows as input size increases",
+      explanation: "Big O describes the growth pattern of work or memory as input size changes.",
     },
     {
-      question: "In recursion, why must you always include a 'base-case'?",
+      question: "Why does recursion need a base case?",
       options: [
-        "To provide a stopping condition so the function doesn't loop infinitely and crash the stack",
-        "To compile the source code into raw binary assembly language",
-        "To style the user interface with responsive design layouts",
-        "To increase the speed of network response times across foreign countries"
+        "To provide a stopping condition",
+        "To change the font size",
+        "To encrypt the source code",
+        "To increase the screen resolution",
       ],
-      answer: "To provide a stopping condition so the function doesn't loop infinitely and crash the stack",
-      explanation: "Superb! Without a base case, recursion continues infinitely and causes a stack overflow crash!"
-    }
+      answer: "To provide a stopping condition",
+      explanation: "Without a base case, recursion may continue calling itself indefinitely.",
+    },
   ],
-  originalMarkdown: `# COURSE NOTES: CS 101 - SECTION 3: COMPLEXITY ANALYSIS\n\n## Big O Notation\nIn Computer Science, complexity analysis lets us evaluate how the runtime or memory requirements of an algorithm scale with input size. Formally, Big O describes the asymptotic upper bound of runtime steps.\n\n## Recursion\nA design pattern where a function references itself in its definition. Every recursion needs a base case to exit safely without stack-overflow.\n\n## Hash Collisions\nHash tables use index math to assign buckets. Collisions occur when distinct keys produce identical hash indices.`,
+  originalMarkdown:
+    "# COURSE NOTES: CS 101 - COMPLEXITY ANALYSIS\n\n## Big O Notation\nComplexity analysis evaluates how runtime or memory requirements scale with input size.\n\n## Recursion\nA function references itself to solve smaller versions of a problem. Every recursion needs a base case.\n\n## Hash Collisions\nHash tables can map distinct keys to identical hash indices.",
   createdDate: new Date().toISOString().split("T")[0],
-  studentId: "student-demo"
+  studentId: "student-demo",
 };
+
+const SEEDED_GUIDES: StudyGuide[] = [
+  {
+    id: "dummy-disc-math-401",
+    title: "Discrete Mathematics: Graph Theory and Matrix Operations",
+    examName: "Discrete Math Prep",
+    level: "Accessible Simplification",
+    summary:
+      "Graph theory studies points and the connections between them. It is useful for modeling networks, routes, relationships, and structured decision paths.",
+    concepts: [
+      {
+        exactWord: "Bipartite Graph",
+        sourceMeaning: "Bipartite graphs split vertices into two sets.",
+        mnemonic: "Bipartite = two parts, cross-connections only.",
+        elementaryExplanation:
+          "A bipartite graph separates nodes into two groups, and connections only go from one group to the other.",
+        example:
+          "Customers and restaurants can be modeled as two groups where customers order from restaurants, but customers do not order from other customers.",
+      },
+      {
+        exactWord: "Adjacency Matrix",
+        sourceMeaning: "A matrix can represent whether nodes are directly connected.",
+        mnemonic: "Adjacency matrix = a connection spreadsheet.",
+        elementaryExplanation:
+          "An adjacency matrix is a grid that marks whether each pair of nodes is directly connected.",
+        example:
+          "A flight chart can mark whether there is a direct flight between each pair of cities.",
+      },
+    ],
+    quiz: [
+      {
+        question: "In a bipartite graph, which connection is not allowed?",
+        options: [
+          "A connection between two nodes in the same partition",
+          "A connection between nodes in different partitions",
+          "A connection represented by an edge",
+          "A graph with two groups of nodes",
+        ],
+        answer: "A connection between two nodes in the same partition",
+        explanation: "Bipartite graphs only permit edges between the two separate groups.",
+      },
+    ],
+    originalMarkdown:
+      "# DISCRETE MATHEMATICS\n\n## Graph Theory\nGraphs contain vertices and edges. Bipartite graphs split vertices into two sets.\n\n## Adjacency Matrix\nA matrix can represent whether nodes are directly connected.",
+    createdDate: new Date().toISOString().split("T")[0],
+    studentId: "student-demo",
+  },
+  {
+    id: "dummy-bioc-402",
+    title: "Biochemistry 301: Oxidative Phosphorylation Pathways",
+    examName: "Biochem Midterm 2",
+    level: "Accessible Simplification",
+    summary:
+      "Oxidative phosphorylation is how cells convert energy from food into usable ATP. It relies on electron movement, proton gradients, and ATP synthase activity.",
+    concepts: [
+      {
+        exactWord: "Electron Transport Chain",
+        sourceMeaning: "Complexes move electrons and pump protons.",
+        mnemonic: "ETC = electrons travel checkpoints.",
+        elementaryExplanation:
+          "The electron transport chain passes electrons through a sequence of protein complexes, using the released energy to move protons.",
+        example:
+          "A relay team passes a baton from runner to runner, and each handoff helps move the race forward.",
+      },
+      {
+        exactWord: "ATP Synthase",
+        sourceMeaning: "Protons flow through ATP synthase to produce ATP.",
+        mnemonic: "Synthase spins to synthesize ATP.",
+        elementaryExplanation:
+          "ATP synthase uses the flow of protons like a tiny turbine to make ATP, the cell's usable energy molecule.",
+        example:
+          "A waterwheel turns when water flows through it, converting movement into useful work.",
+      },
+    ],
+    quiz: [
+      {
+        question: "What powers ATP synthase?",
+        options: [
+          "The flow of protons down their gradient",
+          "The direct movement of ribosomes",
+          "The contraction of cell walls",
+          "The splitting of chromosomes",
+        ],
+        answer: "The flow of protons down their gradient",
+        explanation: "ATP synthase uses proton flow to drive ATP production.",
+      },
+    ],
+    originalMarkdown:
+      "# MITOCHONDRIAL BIOCHEMISTRY\n\n## Oxidative Phosphorylation\nCells generate ATP inside the inner mitochondrial membrane.\n\n## Electron Transport Chain\nComplexes move electrons and pump protons.\n\n## ATP Synthase\nProtons flow through ATP synthase to produce ATP.",
+    createdDate: new Date().toISOString().split("T")[0],
+    studentId: "student-demo",
+  },
+];
+
+const upsertDemoStudent = (studentList: StudentAccount[]) => {
+  const demoIndex = studentList.findIndex(
+    (student) => student.id === DEMO_STUDENT.id || student.email === DEMO_STUDENT.email
+  );
+
+  if (demoIndex === -1) {
+    return [...studentList, DEMO_STUDENT];
+  }
+
+  return studentList.map((student, index) =>
+    index === demoIndex
+      ? {
+          ...student,
+          ...DEMO_STUDENT,
+          credits: student.credits ?? DEMO_STUDENT.credits,
+        }
+      : student
+  );
+};
+
+const mergeSeededGuides = (guideList: StudyGuide[]) => {
+  const seededIds = new Set(guideList.map((guide) => guide.id));
+  const missingSeededGuides = SEEDED_GUIDES.filter((guide) => !seededIds.has(guide.id));
+  return missingSeededGuides.length > 0 ? [...guideList, ...missingSeededGuides] : guideList;
+};
+
+const getConceptSourceMeaning = (concept: ReviewerConcept) =>
+  concept.sourceMeaning?.trim() || concept.elementaryExplanation;
 
 export default function App() {
   // App navigation state
@@ -95,9 +245,6 @@ export default function App() {
   // Accounts State
   const [students, setStudents] = useState<StudentAccount[]>([]);
   const [currentStudentID, setCurrentStudentID] = useState<string>("");
-  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
-  const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentGrade, setNewStudentGrade] = useState("Junior Undergraduate");
 
   // Authentication states
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -107,8 +254,8 @@ export default function App() {
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpGrade, setSignUpGrade] = useState("Junior Undergraduate");
-  const [signUpMajor, setSignUpMajor] = useState("Computer Science");
-  const [signUpUniversity, setSignUpUniversity] = useState("Stamford University");
+  const [signUpMajor, setSignUpMajor] = useState("");
+  const [signUpUniversity, setSignUpUniversity] = useState("");
   const [authError, setAuthError] = useState("");
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
@@ -152,125 +299,32 @@ export default function App() {
         setIsApiKeyMissing(true);
       });
 
-    // 2. Load accounts from LocalStorage & Seed credentials
+    // 2. Load accounts from localStorage and seed demo credentials.
     const storedStudents = localStorage.getItem("lesson_reviewer_students");
     let parsedStudents: StudentAccount[] = [];
     if (storedStudents) {
       parsedStudents = JSON.parse(storedStudents);
     }
-
-    // Check if demo user already exists, if not, append it
-    const hasDemo = parsedStudents.some(s => s.email === "demo@university.edu");
-    if (!hasDemo) {
-      const demoStudent: StudentAccount = {
-        id: "student-demo",
-        name: "Jane Doe",
-        email: "demo@university.edu",
-        password: "password123",
-        grade: "Junior Undergraduate",
-        major: "Biomedical Science",
-        university: "Stamford University",
-        credits: 45,
-        createdDate: new Date().toISOString().split("T")[0]
-      };
-      parsedStudents.push(demoStudent);
-      localStorage.setItem("lesson_reviewer_students", JSON.stringify(parsedStudents));
-    }
+    parsedStudents = upsertDemoStudent(parsedStudents);
+    localStorage.setItem("lesson_reviewer_students", JSON.stringify(parsedStudents));
     setStudents(parsedStudents);
 
     // Retrieve active logged in session
     const activeSessionID = localStorage.getItem("current_logged_in_student_id");
-    if (activeSessionID) {
+    if (activeSessionID && parsedStudents.some((student) => student.id === activeSessionID)) {
       setCurrentStudentID(activeSessionID);
+    } else {
+      localStorage.removeItem("current_logged_in_student_id");
     }
 
-    // 3. Load study guides & Seed removable sample guides
+    // 3. Load saved guides and seed demo study guides.
     const storedGuides = localStorage.getItem("lesson_reviewer_guides");
     let parsedGuides: StudyGuide[] = [];
     if (storedGuides) {
       parsedGuides = JSON.parse(storedGuides);
     }
-
-    if (parsedGuides.length === 0) {
-      const dummyDiscreteMath: StudyGuide = {
-        id: "dummy-disc-math-401",
-        title: "Discrete Mathematics: Graph Theory and Matrix Operations",
-        examName: "Discrete Math Prep",
-        level: "Accessible Simplification (Basic Schooling Clarity)",
-        summary: "Graph Theory studies the connections between individual points called nodes. It forms the underlying backbone of modern internet routing protocols, social networks, and map navigation guides!",
-        concepts: [
-          {
-            exactWord: "Bipartite Graph",
-            mnemonic: "Bipartite = Bi-Part (Two Parts)! Points only connect with members of the opposite group, never their own!",
-            elementaryExplanation: "Imagine customers and service providers. A transaction line only ever links a customer to a service provider, never directly between two customers or two service providers. That represents a bipartite configuration! Nodes are partitioned into two separate sets, and connections only exist between the opposite sets.",
-            example: "A group of customers and a group of restaurants. Customers only buy food from restaurants; customers don't buy food from other customers directly."
-          },
-          {
-            exactWord: "Adjacency Matrix",
-            mnemonic: "Adjacency Grid: A spreadsheet of connections where '1' means directly linked, and '0' means disconnected!",
-            elementaryExplanation: "A neat grid of numbers where rows and columns represent points. A '1' at coordinate (A, B) means point A has a direct path to point B, while '0' means they are disconnected. It helps computer programs lookup connections instantly.",
-            example: "A flight lookup chart on an airline database: rows are departure cities, columns are arrival cities, and a checked mark means there is a direct flight routing available."
-          }
-        ],
-        quiz: [
-          {
-            question: "In a Bipartite Graph, which of the following connections is strictly forbidden?",
-            options: [
-              "A connection between two nodes in the exact same partition group",
-              "A connection between two nodes in different partition groups",
-              "A connection from a node back to itself as a self-loop",
-              "A graph containing more than two separate groups"
-            ],
-            answer: "A connection between two nodes in the exact same partition group",
-            explanation: "Perfect! Bipartite graph constraints specify that edges can only exist between different partition groups, never within a single group."
-          }
-        ],
-        originalMarkdown: `# COURSE SYLLABUS NOTES: DISCRETE MATHEMATICS\n\n## Graph Theory Fundamentals\nA graph is composed of Vertices (or Nodes) and Edges. In Bipartite Graphs, the partition sets V1 and V2 have no internal relationships. Edges only construct cross-links between key sets.\n\n## Adjacency Matrix Representation\nTo analyze connections computationally, we map graphs into arbitrary N x N binary grids where matrix cell adjacency values equal 1 if there is a direct edge between nodes, and 0 otherwise.`,
-        createdDate: new Date().toISOString().split("T")[0],
-        studentId: "student-demo"
-      };
-
-      const dummyBiochemistry: StudyGuide = {
-        id: "dummy-bioc-402",
-        title: "Biochemistry 301: Oxidative Phosphorylation Pathways",
-        examName: "Biochem Midterm 2",
-        level: "Accessible Simplification (Basic Schooling Clarity)",
-        summary: "Oxidative Phosphorylation is how our cellular mitochondria turn the food we eat into actual energetic currency. It behaves like a massive hydroelectric dam built inside every cell of your body!",
-        concepts: [
-          {
-            exactWord: "Electron Transport Chain",
-            mnemonic: "ETC = Electrons Traveling Continuously along the inner membrane lane!",
-            elementaryExplanation: "A series of active chemical checkpoints that pass high-energy electrons down a physical line. It behaves like a network of automated pumps, where passing the high-energy flow from station to station releases key power used to pump fluids uphill into a storage tank.",
-            example: "A high-efficiency agricultural irrigation setup passing water uphill to build up backpressure inside a hilltop water tower."
-          },
-          {
-            exactWord: "ATP Synthase",
-            mnemonic: "Synthase = Spinning Turbine Harnessing Proton Surge to print cellular cash!",
-            elementaryExplanation: "A rotating nano-scale turbine motor. When positive protons rush back down through this motor, it spins, capturing the physical turn to lock power into an energy-carrying molecule called ATP.",
-            example: "A classic waterwheel at a grinding mill that revolves as river water crashes over it, using the kinetic spin to grind wheat."
-          }
-        ],
-        quiz: [
-          {
-            question: "What powers the rotary turbine of ATP Synthase?",
-            options: [
-              "The energetic flow of protons down their electrochemical concentration gradient",
-              "The direct electrical impulse sent by nerve synaptic terminals",
-              "The mechanical contraction of cell membranes during mitotic replication",
-              "The burning of glucose inside ribosome protein factories"
-            ],
-            answer: "The energetic flow of protons down their electrochemical concentration gradient",
-            explanation: "Spot on! The sheer pressure of proton accumulation forces them through the ATP Synthase rotor, inducing the mechanical spin that manufactures ATP."
-          }
-        ],
-        originalMarkdown: `# MITOCHONDRIAL BIOCHEMISTRY: SECTIONS 5-7\n\n## Oxidative Phosphorylation Pathways\nLiving organisms generate ATP inside the inner mitochondrial membrane. The electron flow establishes a high-frequency electrochemical gradient.\n\n## Electron Transport Chain\nComplexes I, II, III and IV pump hydrogen molecules outwards using energy released by redox reactions.\n\n## ATP Synthase Rotational Catalysis\nProtons flow back into the matrix down their chemical charge gradient, spinning the asymmetric rotary rotor catalyst to synthesize adenosine triphosphate.`,
-        createdDate: new Date().toISOString().split("T")[0],
-        studentId: "student-demo"
-      };
-
-      parsedGuides = [dummyDiscreteMath, dummyBiochemistry];
-      localStorage.setItem("lesson_reviewer_guides", JSON.stringify(parsedGuides));
-    }
+    parsedGuides = mergeSeededGuides(parsedGuides);
+    localStorage.setItem("lesson_reviewer_guides", JSON.stringify(parsedGuides));
     setSavedGuides(parsedGuides);
   }, []);
 
@@ -302,18 +356,7 @@ export default function App() {
       setLoginPassword("");
       setActiveTab("workspace");
     } else {
-      setAuthError("Incorrect email or password. Feel free to use the preloaded demo account below!");
-    }
-  };
-
-  // One-Click Demo Development account quick login
-  const handleQuickDemoLogin = () => {
-    setAuthError("");
-    const matched = students.find((s) => s.email === "demo@university.edu");
-    if (matched) {
-      setCurrentStudentID(matched.id);
-      localStorage.setItem("current_logged_in_student_id", matched.id);
-      setActiveTab("workspace");
+      setAuthError("Incorrect email or password.");
     }
   };
 
@@ -341,8 +384,8 @@ export default function App() {
       email: signUpEmail.trim(),
       password: signUpPassword,
       grade: signUpGrade,
-      major: signUpMajor,
-      university: signUpUniversity,
+      major: signUpMajor.trim() || "Not specified",
+      university: signUpUniversity.trim() || "Not specified",
       credits: 30, // 30 free study coins for new collegiate students
       createdDate: new Date().toISOString().split("T")[0]
     };
@@ -357,8 +400,8 @@ export default function App() {
     setSignUpEmail("");
     setSignUpPassword("");
     setSignUpGrade("Junior Undergraduate");
-    setSignUpMajor("Computer Science");
-    setSignUpUniversity("Stamford University");
+    setSignUpMajor("");
+    setSignUpUniversity("");
     
     // Auto-navigate to workspace
     setActiveTab("workspace");
@@ -369,29 +412,6 @@ export default function App() {
     setCurrentStudentID("");
     localStorage.removeItem("current_logged_in_student_id");
     setActiveTab("landing");
-  };
-
-  // Add Profile Action (deprecating but keeping as optional API compatibility wrapper)
-  const handleCreateStudentProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newStudentName.trim()) return;
-
-    const newProfile: StudentAccount = {
-      id: "student-" + Date.now(),
-      name: newStudentName.trim(),
-      email: "local_" + Date.now() + "@university.edu",
-      grade: newStudentGrade,
-      major: "General Science",
-      university: "Stamford University",
-      credits: 15,
-      createdDate: new Date().toISOString().split("T")[0]
-    };
-
-    const list = [...students, newProfile];
-    syncStudents(list);
-    setCurrentStudentID(newProfile.id);
-    setNewStudentName("");
-    setShowAddStudentModal(false);
   };
 
   // Buy Credits Action
@@ -610,13 +630,14 @@ export default function App() {
     setActiveTab("reviewer");
   };
 
-  // Action: Launch a quick demo guide to see how the app looks
   const handleLaunchMockDemo = () => {
-    const matched = students.find((s) => s.email === "demo@university.edu");
-    if (matched) {
-      setCurrentStudentID(matched.id);
-      localStorage.setItem("current_logged_in_student_id", matched.id);
-    }
+    const updatedStudents = upsertDemoStudent(students);
+    const updatedGuides = mergeSeededGuides(savedGuides);
+
+    syncStudents(updatedStudents);
+    syncGuides(updatedGuides);
+    setCurrentStudentID(DEMO_STUDENT.id);
+    localStorage.setItem("current_logged_in_student_id", DEMO_STUDENT.id);
     setActiveGuide(MOCK_DEMO_GUIDE);
     setGuideViewerTab("overview");
     setActiveTab("reviewer");
@@ -640,14 +661,15 @@ export default function App() {
     if (!belongsToActiveStudent) return false;
     return g.title.toLowerCase().includes(term) || g.examName.toLowerCase().includes(term);
   });
+  const activeStudentGuides = savedGuides.filter((g) => g.studentId === currentStudentID);
 
   return (
-    <div id="main-scaffold" class="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div id="main-scaffold" className="min-h-screen bg-[#F7F3EA] text-[#1F2933] flex flex-col font-sans">
       
       {/* API Key Missing warning banner */}
       {isApiKeyMissing && (
-        <div id="api-key-warning" class="bg-amber-500 text-slate-900 px-4 py-3 text-center text-sm font-medium flex items-center justify-center gap-2 border-b border-amber-600/20">
-          <AlertTriangle class="w-4 h-4 flex-shrink-0 animate-bounce" />
+        <div id="api-key-warning" className="bg-orange-100 text-orange-950 px-4 py-3 text-center text-sm font-semibold flex items-center justify-center gap-2 border-b border-orange-200">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
           <span>
             <strong>Gemini API Key is not set yet!</strong> Please configure your <code>GEMINI_API_KEY</code> variable in the <strong>Settings &gt; Secrets</strong> panel of Google AI Studio.
           </span>
@@ -655,42 +677,43 @@ export default function App() {
       )}
 
       {/* Primary Top Header Nav */}
-      <header id="app-header" class="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <header id="app-header" className="sticky top-0 z-40 border-b border-teal-900/10 bg-white/90 shadow-sm backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row gap-3 items-center justify-between">
           
           {/* Main Logo (Branding) */}
           <div 
             onClick={() => setActiveTab("landing")} 
-            class="flex items-center gap-2.5 cursor-pointer group flex-shrink-0 justify-center md:justify-start"
+            className="flex items-center gap-3 cursor-pointer group flex-shrink-0 justify-center md:justify-start"
           >
-            <div class="p-2 bg-indigo-600 text-white rounded-xl shadow-md group-hover:bg-indigo-700 transition-colors">
-              <GraduationCap class="w-6 h-6" />
+            <div className="p-2 bg-[#2F5D50] text-white rounded-xl shadow-sm group-hover:bg-[#254A40] transition-colors duration-200">
+              <GraduationCap className="w-6 h-6" />
             </div>
-            <div class="text-left">
-              <span class="text-base sm:text-lg font-bold font-display tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors block leading-tight">
+            <div className="text-left">
+              <span className="text-base sm:text-lg font-black tracking-normal text-[#1F2933] group-hover:text-[#2F5D50] transition-colors block leading-tight">
                 ReviewStack
               </span>
-              <span class="text-[9px] sm:text-[10px] font-mono text-slate-400 block uppercase font-bold tracking-widest leading-none mt-0.5">
-                Smart Study Companion
+              <span className="text-[10px] font-mono text-slate-500 block uppercase font-bold tracking-wider leading-none mt-0.5">
+                PDF to Study Desk
               </span>
             </div>
           </div>
 
           {/* Centered Top Navigation Segment (requirement 3) */}
           {activeStudent ? (
-            <div class="flex justify-center flex-1 md:px-4">
-              <nav class="flex items-center gap-1 bg-slate-100 border border-slate-200/60 p-1 rounded-xl w-fit">
+            <div className="flex justify-center flex-1 md:px-4 w-full md:w-auto overflow-x-auto">
+              <nav className="flex items-center gap-1 bg-[#EEF4EF] border border-teal-900/10 p-1 rounded-xl w-fit">
                 <button
                   onClick={() => {
                     setActiveTab("workspace");
                     setShowProfileDropdown(false);
                   }}
-                  class={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                  className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors duration-200 whitespace-nowrap ${
                     activeTab === "workspace"
-                      ? "bg-white text-indigo-600 shadow-3xs font-bold"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-[#2F5D50] shadow-sm"
+                      : "text-slate-600 hover:text-[#1F2933]"
                   }`}
                 >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
                   Workspace
                 </button>
                 <button
@@ -698,13 +721,14 @@ export default function App() {
                     setActiveTab("history");
                     setShowProfileDropdown(false);
                   }}
-                  class={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                  className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors duration-200 whitespace-nowrap ${
                     activeTab === "history"
-                      ? "bg-white text-indigo-600 shadow-3xs font-bold"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-[#2F5D50] shadow-sm"
+                      : "text-slate-600 hover:text-[#1F2933]"
                   }`}
                 >
-                  Saved ({savedGuides.filter((g) => g.studentId === currentStudentID).length})
+                  <NotebookTabs className="w-3.5 h-3.5" />
+                  Saved ({activeStudentGuides.length})
                 </button>
                 {activeGuide && (
                   <button
@@ -712,101 +736,104 @@ export default function App() {
                       setActiveTab("reviewer");
                       setShowProfileDropdown(false);
                     }}
-                    class={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-colors duration-200 whitespace-nowrap ${
                       activeTab === "reviewer"
-                        ? "bg-white text-indigo-600 shadow-3xs font-bold"
-                        : "text-slate-600 hover:text-slate-900"
+                        ? "bg-white text-[#2F5D50] shadow-sm"
+                        : "text-slate-600 hover:text-[#1F2933]"
                     }`}
                   >
+                    <BookOpen className="w-3.5 h-3.5" />
                     Active Review
                   </button>
                 )}
               </nav>
             </div>
           ) : (
-            <div class="hidden md:block flex-1"></div>
+            <div className="hidden md:block flex-1"></div>
           )}
 
           {/* Student Account Info, Credits, and Dropdown Trigger (requirement 4) */}
           {activeStudent ? (
-            <div class="flex items-center gap-4 flex-shrink-0 justify-center md:justify-end">
+            <div className="flex items-center gap-3 flex-shrink-0 justify-center md:justify-end">
               
               {/* Credit Ledger pill */}
-              <div class="flex items-center gap-1.5 px-3 py-2 bg-indigo-50 border border-indigo-100/60 rounded-xl">
-                <Sparkles class="w-4 h-4 text-indigo-600 animate-pulse" />
-                <span class="text-xs font-semibold text-slate-700">
-                  <strong class="text-indigo-700 font-bold">{activeStudent.credits}</strong> Study Coins
+              <div className="flex items-center gap-1.5 px-3 py-2 bg-white border border-teal-900/10 rounded-xl shadow-sm">
+                <WalletCards className="w-4 h-4 text-[#2F5D50]" />
+                <span className="text-xs font-bold text-slate-700">
+                  <strong className="text-[#1F2933] font-black">{activeStudent.credits}</strong> coins
                 </span>
                 
                 {/* Buy Link */}
                 <button
                   onClick={() => initiateBuyCredits({name: "Super Pack", price: 520, credits: 50})}
-                  class="ml-1.5 px-2 py-0.5 text-[10px] bg-indigo-600 hover:bg-indigo-700 text-white font-mono uppercase font-black rounded-md tracking-wider transition"
+                  className="ml-1 px-2 py-0.5 text-[10px] bg-[#B45309] hover:bg-[#92400E] text-white font-mono uppercase font-black rounded-md tracking-wider transition-colors duration-200 cursor-pointer"
                 >
                   Buy
                 </button>
               </div>
 
               {/* Profile Avatar logo trigger (Dropdown) */}
-              <div class="relative">
+              <div className="relative">
                 <button 
                   onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                  class="flex items-center justify-center w-9 h-9 bg-linear-to-tr from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-full shadow-md focus:outline-none transition-all group relative border border-indigo-200"
+                  className="flex items-center justify-center w-10 h-10 bg-[#1F2933] hover:bg-[#2F5D50] text-white rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-300 transition-colors duration-200 group relative border border-white cursor-pointer"
+                  aria-label="Open account menu"
                 >
-                  <span class="text-xs font-bold font-mono tracking-tighter">
+                  <span className="text-xs font-bold font-mono tracking-tighter">
                     {activeStudent.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
                   </span>
-                  <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-emerald-400"></span>
+                  <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-emerald-400"></span>
                 </button>
 
                 {showProfileDropdown && (
                   <>
                     {/* Click-out overlay */}
                     <div 
-                      class="fixed inset-0 z-40 cursor-default" 
+                      className="fixed inset-0 z-40 cursor-default" 
                       onClick={() => setShowProfileDropdown(false)}
                     />
-                    <div class="absolute right-0 mt-3.5 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 py-4 px-4 z-50 space-y-3.5 animate-fade-in text-left">
+                    <div className="absolute right-0 mt-3.5 w-72 bg-white rounded-2xl shadow-xl border border-teal-900/10 py-4 px-4 z-50 space-y-3.5 animate-fade-up text-left">
                       {/* User Header Profile */}
-                      <div class="border-b border-slate-100 pb-3 flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">
+                      <div className="border-b border-slate-100 pb-3 flex items-center gap-2.5">
+                        <div className="w-9 h-9 rounded-full bg-[#EEF4EF] text-[#2F5D50] flex items-center justify-center font-bold text-xs">
                           {activeStudent.name[0].toUpperCase()}
                         </div>
-                        <div class="text-xs overflow-hidden">
-                          <span class="block font-bold text-slate-800 truncate text-xs font-sans">
+                        <div className="text-xs overflow-hidden">
+                          <span className="block font-black text-[#1F2933] truncate text-xs font-sans">
                             {activeStudent.name}
                           </span>
-                          <span class="block text-[10px] text-slate-450 truncate font-mono">
+                          <span className="block text-[10px] text-slate-500 truncate font-mono">
                             {activeStudent.email}
                           </span>
                         </div>
                       </div>
 
                       {/* Academic detail rows */}
-                      <div class="space-y-2 text-xs text-slate-600">
-                        <div class="flex items-center justify-between">
-                          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Year</span>
-                          <span class="font-medium text-slate-800 text-right">{activeStudent.grade}</span>
+                      <div className="space-y-2 text-xs text-slate-600">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Year</span>
+                          <span className="font-medium text-slate-800 text-right">{activeStudent.grade}</span>
                         </div>
-                        <div class="flex items-center justify-between">
-                          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Major</span>
-                          <span class="font-medium text-slate-800 text-right">{activeStudent.major}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Major</span>
+                          <span className="font-medium text-slate-800 text-right">{activeStudent.major}</span>
                         </div>
-                        <div class="flex items-center justify-between">
-                          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Univ</span>
-                          <span class="font-medium text-slate-800 text-right truncate max-w-[120px]">{activeStudent.university}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">Univ</span>
+                          <span className="font-medium text-slate-800 text-right truncate max-w-[120px]">{activeStudent.university}</span>
                         </div>
                       </div>
 
                       {/* Action items inside menu */}
-                      <div class="border-t border-slate-100 pt-3">
+                      <div className="border-t border-slate-100 pt-3">
                         <button
                           onClick={() => {
                             setShowProfileDropdown(false);
                             handleLogOut();
                           }}
-                          class="w-full py-2 hover:bg-rose-50 border border-slate-200 hover:border-rose-100 text-slate-600 hover:text-rose-600 text-xs font-bold rounded-xl transition text-center font-sans"
+                          className="w-full py-2.5 hover:bg-rose-50 border border-slate-200 hover:border-rose-100 text-slate-600 hover:text-rose-600 text-xs font-bold rounded-xl transition-colors duration-200 text-center font-sans cursor-pointer flex items-center justify-center gap-2"
                         >
+                          <LogOut className="w-3.5 h-3.5" />
                           Sign Out of Account
                         </button>
                       </div>
@@ -820,7 +847,7 @@ export default function App() {
             <button
               id="btn-nav-login"
               onClick={() => setActiveTab("workspace")}
-              class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition cursor-pointer"
+              className="px-4 py-2 bg-[#2F5D50] hover:bg-[#254A40] text-white text-xs font-bold rounded-xl shadow-sm transition-colors duration-200 cursor-pointer"
             >
               Log In
             </button>
@@ -829,30 +856,53 @@ export default function App() {
       </header>
 
       {/* Main Workspace Body */}
-      <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
         
         {/* SECURE UNDERGRADUATE AUTH PORTAL */}
         {!activeStudent && activeTab !== "landing" && (
-          <div id="auth-viewport" class="max-w-md mx-auto py-12 px-4 sm:px-6 animate-fade-up">
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
+          <div id="auth-viewport" className="max-w-5xl mx-auto py-10 animate-fade-up">
+            <div className="grid overflow-hidden rounded-3xl border border-teal-900/10 bg-white shadow-xl shadow-teal-950/5 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="hidden bg-[#1F2933] p-8 text-white lg:flex lg:flex-col lg:justify-between">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold text-teal-50">
+                    <ShieldCheck className="h-4 w-4 text-[#B45309]" />
+                    Local student profile
+                  </div>
+                  <h2 className="mt-8 text-3xl font-black tracking-normal">Keep every reviewer tied to your study account.</h2>
+                  <p className="mt-4 text-sm leading-7 text-teal-50">
+                    Sign in to save generated guides, revisit flashcards, and keep your study coin balance visible while you prepare.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                    <div className="text-2xl font-black">{activeStudentGuides.length}</div>
+                    <div className="mt-1 text-teal-100">Saved guides</div>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                    <div className="text-2xl font-black">30</div>
+                    <div className="mt-1 text-teal-100">Starter coins</div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 sm:p-8 lg:p-10 space-y-6">
               
               {/* Header Branding */}
-              <div class="text-center space-y-2">
-                <div class="p-3 bg-indigo-50 text-indigo-650 rounded-2xl w-fit mx-auto shadow-sm">
-                  <GraduationCap class="w-8 h-8 text-indigo-600" />
+              <div className="text-center space-y-2">
+                <div className="p-3 bg-[#EEF4EF] text-[#2F5D50] rounded-2xl w-fit mx-auto shadow-sm">
+                  <GraduationCap className="w-8 h-8 text-[#2F5D50]" />
                 </div>
-                <h2 class="text-2xl font-bold font-display text-slate-900 tracking-tight">
-                  {isSignUpMode ? "Create Academic Account" : "Login"}
+                <h2 className="text-2xl font-black text-[#1F2933] tracking-normal">
+                  {isSignUpMode ? "Create Academic Account" : "Welcome Back"}
                 </h2>
-                <p class="text-xs text-slate-500 max-w-xs mx-auto">
+                <p className="text-xs text-slate-500 max-w-xs mx-auto">
                   {isSignUpMode 
-                    ? "Establish your local, client-encrypted profile to save advanced curriculum reviews." 
-                    : "to get started"}
+                    ? "Create a local profile to save reviewers and track study coins." 
+                    : "Sign in with your profile or use the demo account."}
                 </p>
               </div>
 
               {authError && (
-                <div class="p-3 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl text-xs font-medium text-center">
+                <div className="p-3 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl text-xs font-semibold text-center" role="alert">
                   {authError}
                 </div>
               )}
@@ -860,115 +910,115 @@ export default function App() {
               {/* Form block */}
               {!isSignUpMode ? (
                 /* LOGIN FORM */
-                <form onSubmit={handleLogin} class="space-y-4">
-                  <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Email</label>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="login-email" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Email</label>
                     <input
+                      id="login-email"
                       type="email"
                       required
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder="demo@university.edu"
-                      class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                      placeholder="student@university.edu"
+                      className="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                     />
                   </div>
 
-                  <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Password</label>
+                  <div className="space-y-1.5">
+                    <label htmlFor="login-password" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Password</label>
                     <input
+                      id="login-password"
                       type="password"
                       required
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="•••••••• (default: password123)"
-                      class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                      placeholder="Your password"
+                      className="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition shadow shadow-indigo-100"
+                    className="w-full py-3 bg-[#2F5D50] hover:bg-[#254A40] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors duration-200 shadow-sm cursor-pointer"
                   >
                     Log in
                   </button>
                 </form>
               ) : (
                 /* SIGN UP FORM */
-                <form onSubmit={handleSignUp} class="space-y-3.5 flex flex-col">
-                  <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Full Student Name</label>
+                <form onSubmit={handleSignUp} className="space-y-3.5 flex flex-col">
+                  <div className="space-y-1">
+                    <label htmlFor="signup-name" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Full Student Name</label>
                     <input
+                      id="signup-name"
                       type="text"
                       required
                       value={signUpName}
                       onChange={(e) => setSignUpName(e.target.value)}
                       placeholder="e.g. Johnathan Smith"
-                      class="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                      className="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                     />
                   </div>
 
-                  <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Email</label>
+                  <div className="space-y-1">
+                    <label htmlFor="signup-email" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Email</label>
                     <input
+                      id="signup-email"
                       type="email"
                       required
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       placeholder="e.g. student@university.edu"
-                      class="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                      className="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                     />
                   </div>
 
-                  <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Password</label>
+                  <div className="space-y-1">
+                    <label htmlFor="signup-password" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Password</label>
                     <input
+                      id="signup-password"
                       type="password"
                       required
                       value={signUpPassword}
                       onChange={(e) => setSignUpPassword(e.target.value)}
                       placeholder="Minimum 6 characters"
-                      class="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                      className="w-full text-xs p-2.5 border border-slate-200 rounded-xl bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                     />
                   </div>
 
-                  <div class="grid grid-cols-2 gap-2">
-                    <div class="space-y-1">
-                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Academic Major</label>
-                      <select
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1">
+                      <label htmlFor="signup-major" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Academic Major</label>
+                      <input
+                        id="signup-major"
+                        type="text"
                         value={signUpMajor}
                         onChange={(e) => setSignUpMajor(e.target.value)}
-                        class="w-full text-xs p-2 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer text-slate-700 bg-white"
-                      >
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="Biochemistry">Biochemistry</option>
-                        <option value="Mechanical Engineering">Mechanical Eng</option>
-                        <option value="Nursing / Pre-Med">Nursing / Pre-Med</option>
-                        <option value="Business Administration">Business Admin</option>
-                        <option value="Political Science">Political Science</option>
-                      </select>
+                        placeholder="e.g. Computer Science"
+                        className="w-full text-xs p-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2F5D50] cursor-pointer text-slate-700 bg-white"
+                      />
                     </div>
 
-                    <div class="space-y-1">
-                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">University</label>
-                      <select
+                    <div className="space-y-1">
+                      <label htmlFor="signup-university" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">University</label>
+                      <input
+                        id="signup-university"
+                        type="text"
                         value={signUpUniversity}
                         onChange={(e) => setSignUpUniversity(e.target.value)}
-                        class="w-full text-xs p-2 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer text-slate-700 bg-white"
-                      >
-                        <option value="Stamford University">Stamford University</option>
-                        <option value="State Tech College">State Tech College</option>
-                        <option value="Eastern University">Eastern University</option>
-                        <option value="Metropolitan College">Metropolitan College</option>
-                      </select>
+                        placeholder="e.g. Your school"
+                        className="w-full text-xs p-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2F5D50] cursor-pointer text-slate-700 bg-white"
+                      />
                     </div>
                   </div>
 
-                  <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Class Level</label>
+                  <div className="space-y-1">
+                    <label htmlFor="signup-grade" className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Class Level</label>
                     <select
+                      id="signup-grade"
                       value={signUpGrade}
                       onChange={(e) => setSignUpGrade(e.target.value)}
-                      class="w-full text-xs p-2 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer font-sans text-slate-700 bg-white"
+                      className="w-full text-xs p-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2F5D50] cursor-pointer font-sans text-slate-700 bg-white"
                     >
                       <option value="Freshman Undergraduate">Freshman Student (Year 1)</option>
                       <option value="Sophomore Undergraduate">Sophomore Student (Year 2)</option>
@@ -980,7 +1030,7 @@ export default function App() {
 
                   <button
                     type="submit"
-                    class="w-full py-3 mt-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition shadow shadow-indigo-100"
+                    className="w-full py-3 mt-1.5 bg-[#2F5D50] hover:bg-[#254A40] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors duration-200 shadow-sm cursor-pointer"
                   >
                     Register and Login
                   </button>
@@ -988,13 +1038,13 @@ export default function App() {
               )}
 
               {/* Login Toggle */}
-              <div class="text-center pt-2">
+              <div className="text-center pt-2">
                 <button
                   onClick={() => {
                     setIsSignUpMode(!isSignUpMode);
                     setAuthError("");
                   }}
-                  class="text-xs text-indigo-600 hover:underline font-semibold"
+                  className="text-xs text-[#2F5D50] hover:text-[#254A40] hover:underline font-bold cursor-pointer"
                 >
                   {isSignUpMode 
                     ? "Already have an account? Sign In" 
@@ -1002,233 +1052,257 @@ export default function App() {
                 </button>
               </div>
 
+              </div>
             </div>
           </div>
         )}
 
-        {/* Landing/Intro page structure */}
         {activeTab === "landing" && (
-          <QuickStartLanding 
-            onStart={() => {
-              setActiveTab("workspace");
-            }} 
-            onViewDemo={handleLaunchMockDemo} 
+          <QuickStartLanding
+            onStart={() => setActiveTab("workspace")}
+            onViewDemo={handleLaunchMockDemo}
           />
         )}
 
         {/* STUDY WORKSPACE (UPLOADER & BUILD PANEL) */}
         {activeStudent && activeTab === "workspace" && (
-          <div id="workspace-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-up">
-            
-            {/* Column 1: PDF Local browser parsing */}
-            <div class="lg:col-span-7 space-y-6">
-              <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+          <div id="workspace-grid" className="space-y-6 animate-fade-up">
+            <section className="rounded-lg border border-slate-200 bg-[#FBFAF6] px-5 py-4 shadow-sm">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <h2 class="text-xl sm:text-2xl font-bold font-display text-slate-900 flex items-center gap-2">
-                    <FileText class="w-6 h-6 text-indigo-600" /> Load Lesson Documents
+                  <div className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-600">
+                    <Target className="h-3.5 w-3.5 text-[#2F5D50]" />
+                    {activeStudent.name}'s study desk
+                  </div>
+                  <h2 className="mt-3 font-display text-3xl font-semibold tracking-normal text-[#1F2933]">
+                    Source notes on the left. Reviewer settings on the right.
                   </h2>
-                  <p class="text-slate-500 text-xs sm:text-sm mt-1">
-                    Upload your lesson PDF file. We will extract its text structure locally using your secure browser session.
+                  <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+                    Paste or upload course material, choose how it should be simplified, then generate a focused reviewer.
                   </p>
                 </div>
-
-                {/* PDF Dropzone */}
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-150 cursor-pointer relative ${
-                    isDraggingOver
-                      ? "border-indigo-500 bg-indigo-50/50"
-                      : "border-slate-250 hover:border-slate-400 bg-slate-50"
-                  }`}
-                >
-                  <input
-                    id="file-upload-input"
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0) {
-                        handlePdfFileSelection(e.target.files[0]);
-                      }
-                    }}
-                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <div class="flex flex-col items-center justify-center space-y-3">
-                    <div class="p-3.5 bg-indigo-100 text-indigo-700 rounded-full">
-                      {isParsingPDF ? (
-                        <Loader2 class="w-6 h-6 animate-spin" />
-                      ) : (
-                        <FileText class="w-6 h-6" />
-                      )}
-                    </div>
-                    {isParsingPDF ? (
-                      <div>
-                        <p class="text-sm font-semibold text-indigo-700">Parsing PDF inside browser session...</p>
-                        <p class="text-xs text-slate-400 mt-1">Reading page elements, formatting headings...</p>
-                      </div>
-                    ) : (
-                      <div>
-                        <p class="text-sm font-semibold text-slate-800">
-                          {fileToUpload ? fileToUpload.name : "Click to select or drag PDF plan here"}
-                        </p>
-                        <p class="text-xs text-slate-400 mt-1">
-                          Only standard PDF. Maximum 10MB capacity size limit.
-                        </p>
-                      </div>
-                    )}
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                    <div className="font-mono text-base font-black text-[#1F2933]">{activeStudent.credits}</div>
+                    <div className="text-slate-500">Coins</div>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                    <div className="font-mono text-base font-black text-[#1F2933]">{activeStudentGuides.length}</div>
+                    <div className="text-slate-500">Guides</div>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                    <div className="font-mono text-base font-black text-[#1F2933]">{extractedMarkdown.trim() ? "Ready" : "Empty"}</div>
+                    <div className="text-slate-500">Notes</div>
                   </div>
                 </div>
+              </div>
+            </section>
 
-                {/* Extracted Text Manual Block Area */}
-                <div class="space-y-2">
-                  <div class="flex justify-between items-center text-xs text-slate-500 font-mono">
-                    <span class="font-medium flex items-center gap-1">
-                      Current Session Lesson Text (Markdown)
-                    </span>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+              <div className="lg:col-span-8 space-y-6">
+                <section className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-black text-[#1F2933] flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-[#2F5D50]" /> Source Material
+                      </h3>
+                      <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                        Upload a PDF or paste lesson notes. The text stays editable before generation.
+                      </p>
+                    </div>
                     {extractedMarkdown && (
-                      <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">
-                        Parsed Successfully
+                      <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-700">
+                        <Check className="h-3.5 w-3.5" />
+                        Text loaded
                       </span>
                     )}
                   </div>
-                  <textarea
-                    id="lesson-text-editor"
-                    value={extractedMarkdown}
-                    onChange={(e) => setExtractedMarkdown(e.target.value)}
-                    placeholder="Extracted lesson content details will appear here inside your safe browser session. You can also paste your lesson plans, bullet notes, science facts, or vocabulary directly!"
-                    className="w-full h-64 p-4 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-mono transition-all leading-relaxed"
-                  />
-                </div>
-              </div>
-            </div>
 
-            {/* Column 2: Teacher Setup controls & trigger */}
-            <div class="lg:col-span-5 space-y-6">
-              <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div>
-                  <h3 class="text-lg font-bold font-display text-slate-900 flex items-center gap-2">
-                    <Sparkles class="w-5 h-5 text-indigo-600 animate-pulse" /> Study Helper Settings
-                  </h3>
-                  <p class="text-slate-500 text-xs mt-1">Configure your grade objectives to tailor explanations.</p>
-                </div>
-
-                <div class="space-y-4">
-                  {/* Title of exam */}
-                  <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block">Exam/Lesson Focus Title</label>
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`relative rounded-lg border-2 border-dashed p-6 text-center transition-colors duration-200 cursor-pointer ${
+                      isDraggingOver
+                        ? "border-[#2F5D50] bg-[#EEF4EF]"
+                        : "border-teal-900/15 bg-[#F8FAFC] hover:border-[#2F5D50]/70"
+                    }`}
+                  >
                     <input
-                                            type="text"
-                      value={examNameInput}
-                      onChange={(e) => setExamNameInput(e.target.value)}
-                      placeholder="e.g. CS 101 Midterm, Organic Chemistry Quiz"
-                      class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+                      id="file-upload-input"
+                      type="file"
+                      accept="application/pdf"
+                      aria-label="Upload lesson PDF"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          handlePdfFileSelection(e.target.files[0]);
+                        }
+                      }}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
-                  </div>
- 
-                  {/* Level Selection options */}
-                  <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block">Target Simplified Level</label>
-                    <div class="grid grid-cols-1 gap-2.5">
-                      {[
-                        { id: "Accessible Primary Clarity", name: "Accessible Primary Clarity (No Jargon)", badge: "Distills advanced collegiate frameworks into intuitive, respectful real-world analogies" },
-                        { id: "Analogical Undergrad Explanations", name: "Analogical Undergrad Metaphors", badge: "Explains complex university curriculum concepts using everyday physical objects" },
-                        { id: "Introductory Undergrad Analogies", name: "Introductory Undergrad Analogies", badge: "Ideal for fresh learners, reducing jargon into clear physical analogies" }
-                      ].map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => setVocabularyLevel(item.id)}
-                          className={`w-full text-left p-3.5 rounded-xl border-2 transition-all flex items-center justify-between text-xs sm:text-sm ${
-                            vocabularyLevel === item.id
-                              ? "border-indigo-600 bg-indigo-50/20 text-indigo-900 font-medium"
-                              : "border-slate-100 text-slate-600 hover:bg-slate-50"
-                          }`}
-                        >
-                          <div>
-                            <span class="block text-xs sm:text-sm font-semibold">{item.name}</span>
-                            <span class="block text-[10px] text-slate-500 mt-0.5 font-mono">{item.badge}</span>
-                          </div>
-                          {vocabularyLevel === item.id && (
-                            <Check class="w-4 h-4 text-indigo-600 flex-shrink-0" />
-                          )}
-                        </button>
-                      ))}
+                    <div className="flex flex-col items-center justify-center space-y-3">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#EEF4EF] text-[#2F5D50]">
+                        {isParsingPDF ? (
+                          <Loader2 className="w-6 h-6 animate-spin" />
+                        ) : (
+                          <CloudUpload className="w-6 h-6" />
+                        )}
+                      </div>
+                      {isParsingPDF ? (
+                        <div>
+                          <p className="text-sm font-bold text-[#2F5D50]">Parsing PDF inside this browser session...</p>
+                          <p className="text-xs text-slate-500 mt-1">Reading page text and preserving headings.</p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-sm font-bold text-[#1F2933]">
+                            {fileToUpload ? fileToUpload.name : "Drop a PDF here or click to browse"}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-1">
+                            Standard PDF, up to 10MB.
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
 
-                {/* Ledger verification warning */}
-                <div class="border-t border-slate-100 pt-6">
-                  {activeStudent && (
-                    <div class="flex items-start gap-2.5 p-3.5 bg-indigo-50/50 border border-indigo-100 rounded-xl mb-4 text-xs">
-                      <Sparkles class="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs text-slate-500 font-mono">
+                      <label htmlFor="lesson-text-editor" className="font-bold flex items-center gap-1 text-slate-600">
+                        Session Lesson Text
+                      </label>
+                      <span>{extractedMarkdown.length.toLocaleString()} chars</span>
+                    </div>
+                    <textarea
+                      id="lesson-text-editor"
+                      value={extractedMarkdown}
+                      onChange={(e) => setExtractedMarkdown(e.target.value)}
+                      placeholder="Paste lecture notes, textbook excerpts, definitions, or extracted PDF content here."
+                      className="w-full min-h-80 p-4 text-xs sm:text-sm bg-[#F8FAFC] border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white font-mono transition-all leading-relaxed resize-y"
+                    />
+                  </div>
+                </section>
+              </div>
+
+              <div className="lg:col-span-4 space-y-6">
+                <section className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-5">
+                  <div>
+                    <h3 className="text-lg font-black text-[#1F2933] flex items-center gap-2">
+                      <WandSparkles className="w-5 h-5 text-[#B45309]" /> Generation Settings
+                    </h3>
+                    <p className="text-slate-600 text-xs mt-1">Tune the output for the exam and learner level.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="exam-title-input" className="text-xs font-bold text-slate-600 uppercase tracking-wider block">Exam or Lesson Focus</label>
+                      <input
+                        id="exam-title-input"
+                        type="text"
+                        value={examNameInput}
+                        onChange={(e) => setExamNameInput(e.target.value)}
+                        placeholder="e.g. CS 101 Midterm, Organic Chemistry Quiz"
+                        className="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">Simplification Style</label>
+                      <div className="grid grid-cols-1 gap-2">
+                        {[
+                          { id: "Accessible Primary Clarity", name: "Plain-language clarity", badge: "Minimal jargon with respectful, concrete examples" },
+                          { id: "Analogical Undergrad Explanations", name: "Undergrad analogies", badge: "Everyday metaphors for complex curriculum ideas" },
+                          { id: "Introductory Undergrad Analogies", name: "Intro learner mode", badge: "Gentle ramp for first-pass exam preparation" }
+                        ].map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => setVocabularyLevel(item.id)}
+                            className={`w-full text-left p-3 rounded-lg border transition-colors duration-200 flex items-center justify-between gap-3 text-xs sm:text-sm cursor-pointer ${
+                              vocabularyLevel === item.id
+                                ? "border-[#2F5D50] bg-[#EEF4EF] text-[#1F2933]"
+                                : "border-slate-200 text-slate-600 hover:border-[#2F5D50]/50 hover:bg-[#F8FAFC]"
+                            }`}
+                          >
+                            <div>
+                              <span className="block font-black">{item.name}</span>
+                              <span className="block text-[10px] text-slate-500 mt-0.5 font-mono leading-4">{item.badge}</span>
+                            </div>
+                            {vocabularyLevel === item.id && (
+                              <Check className="w-4 h-4 text-[#2F5D50] flex-shrink-0" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-5">
+                    <div className="flex items-start gap-2.5 p-3 bg-orange-50 border border-orange-100 rounded-lg mb-4 text-xs">
+                      <WalletCards className="w-4 h-4 text-[#B45309] flex-shrink-0 mt-0.5" />
                       <div>
-                        <span class="font-semibold text-indigo-950 block">This generation costs: 1 Study Coin</span>
-                        <span class="text-slate-500 block mt-0.5">
-                          You have <strong>{activeStudent.credits} coins</strong> remaining. We'll debit your account on completion!
+                        <span className="font-black text-orange-950 block">Generation cost: 1 Study Coin</span>
+                        <span className="text-slate-600 block mt-0.5">
+                          You have <strong>{activeStudent.credits} coins</strong> available.
                         </span>
                       </div>
                     </div>
-                  )}
 
-                  <button
-                    id="btn-generate-reviewer"
-                    disabled={isGeneratingWorkspace || !extractedMarkdown.trim()}
-                    onClick={handleGenerateStudyGuide}
-                    className={`w-full py-4 font-semibold text-white rounded-xl shadow-lg flex items-center justify-center gap-2 text-base transition duration-150 ${
-                      isGeneratingWorkspace || !extractedMarkdown.trim()
-                        ? "bg-slate-350 cursor-not-allowed text-slate-500"
-                        : "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-100"
-                    }`}
-                  >
-                    {isGeneratingWorkspace ? (
-                      <>
-                        <Loader2 class="w-5 h-5 animate-spin" /> Simplifying Vocabulary... (Takes a second)
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles class="w-5 h-5 fill-white" /> Build Study Guide Reviewer
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
+                    <button
+                      id="btn-generate-reviewer"
+                      disabled={isGeneratingWorkspace || !extractedMarkdown.trim()}
+                      onClick={handleGenerateStudyGuide}
+                      className={`w-full py-4 font-bold rounded-lg flex items-center justify-center gap-2 text-sm transition-colors duration-200 ${
+                        isGeneratingWorkspace || !extractedMarkdown.trim()
+                          ? "bg-slate-200 cursor-not-allowed text-slate-500"
+                          : "bg-[#B45309] hover:bg-[#92400E] text-white shadow-lg shadow-orange-900/10 cursor-pointer"
+                      }`}
+                    >
+                      {isGeneratingWorkspace ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" /> Building reviewer...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" /> Build Study Guide Reviewer
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </section>
 
-              {/* Saved Sheets Sidebar */}
-              <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-50 pb-3">
-                  <h4 class="text-sm font-bold font-display text-slate-950 flex items-center gap-1.5">
-                    <History class="w-4 h-4 text-indigo-600" /> Saved Reviewers
-                  </h4>
-                  <button
-                    onClick={() => setActiveTab("history")}
-                    class="text-xs text-indigo-600 hover:underline font-semibold"
-                  >
-                    View All
-                  </button>
-                </div>
-                {savedGuides.filter((g) => g.studentId === currentStudentID).length === 0 ? (
-                  <p class="text-xs text-slate-400 italic">No reviewers saved under this profile yet.</p>
-                ) : (
-                  <div class="space-y-2">
-                    {savedGuides
-                      .filter((g) => g.studentId === currentStudentID)
-                      .slice(0, 3)
-                      .map((guide) => (
-                        <div 
+                <aside className="bg-white p-5 rounded-lg border border-teal-900/10 shadow-sm space-y-4">
+                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h4 className="text-sm font-black text-[#1F2933] flex items-center gap-1.5">
+                      <History className="w-4 h-4 text-[#2F5D50]" /> Recent Reviewers
+                    </h4>
+                    <button
+                      onClick={() => setActiveTab("history")}
+                      className="text-xs text-[#2F5D50] hover:text-[#254A40] hover:underline font-bold cursor-pointer"
+                    >
+                      View All
+                    </button>
+                  </div>
+                  {activeStudentGuides.length === 0 ? (
+                    <p className="text-xs text-slate-500">No reviewers saved under this profile yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {activeStudentGuides.slice(0, 3).map((guide) => (
+                        <button
                           key={guide.id}
                           onClick={() => handleSelectGuideFromHistory(guide)}
-                          class="group p-3 hover:bg-slate-50 rounded-xl border border-slate-100 cursor-pointer flex items-center justify-between text-xs transition"
+                          className="group w-full p-3 hover:bg-[#F7F3EA] rounded-lg border border-slate-100 cursor-pointer flex items-center justify-between text-xs transition-colors duration-200 text-left"
                         >
-                          <div>
-                            <span class="font-semibold text-slate-800 line-clamp-1 group-hover:text-indigo-600">{guide.title}</span>
-                            <span class="text-[10px] text-slate-400 block mt-0.5">{guide.createdDate}</span>
-                          </div>
-                          <ChevronRight class="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
-                        </div>
+                          <span>
+                            <span className="font-bold text-[#1F2933] line-clamp-1 group-hover:text-[#2F5D50]">{guide.title}</span>
+                            <span className="text-[10px] text-slate-500 block mt-0.5">{guide.createdDate}</span>
+                          </span>
+                          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#2F5D50]" />
+                        </button>
                       ))}
-                  </div>
-                )}
+                    </div>
+                  )}
+                </aside>
               </div>
             </div>
           </div>
@@ -1236,39 +1310,48 @@ export default function App() {
 
         {/* STUDY GUIDE ACTIVE VIEWER */}
         {activeTab === "reviewer" && activeGuide && (
-          <div id="reviewer-space" class="space-y-8 animate-fade-up">
-            
-            {/* Reviewer Header Breadcrumb */}
-            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-              <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-mono font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded">
+          <div id="reviewer-space" className="space-y-6 animate-fade-up">
+            <section className="rounded-lg bg-[#1F2933] p-5 sm:p-6 text-white shadow-lg shadow-teal-950/10">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-mono font-black uppercase tracking-wider text-orange-100 bg-white/10 border border-white/10 px-2.5 py-1 rounded">
                     {activeGuide.examName}
                   </span>
-                  <span class="text-xs text-slate-400 block">Grade Targets: {activeGuide.level}</span>
+                    <span className="text-xs text-teal-100">Target: {activeGuide.level}</span>
+                  </div>
+                  <h2 id="active-reviewer-title" className="max-w-3xl text-2xl sm:text-3xl font-black tracking-normal leading-tight">
+                    {activeGuide.title}
+                  </h2>
                 </div>
-                <h2 id="active-reviewer-title" class="text-xl sm:text-2xl font-bold font-display text-slate-900 tracking-tight leading-tight">
-                  {activeGuide.title}
-                </h2>
+                <div className="grid grid-cols-3 gap-3 text-center text-xs">
+                  <div className="rounded-lg border border-white/10 bg-white/10 p-3">
+                    <div className="text-xl font-black">{activeGuide.concepts.length}</div>
+                    <div className="text-teal-100">Terms</div>
+                  </div>
+                  <div className="rounded-lg border border-white/10 bg-white/10 p-3">
+                    <div className="text-xl font-black">{activeGuide.quiz.length}</div>
+                    <div className="text-teal-100">Questions</div>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab("workspace")}
+                    className="rounded-lg bg-[#B45309] px-4 py-3 text-xs font-black text-white transition-colors duration-200 hover:bg-[#92400E] cursor-pointer"
+                  >
+                    New Guide
+                  </button>
+                </div>
               </div>
-              <div class="flex gap-2">
-                <button
-                  onClick={() => setActiveTab("workspace")}
-                  class="px-5 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-sm font-semibold transition"
-                >
-                  Create Another Sheet
-                </button>
-              </div>
-            </div>
+            </section>
 
             {/* Viewer Tab Selection Segment */}
-            <div class="flex border-b border-slate-200 space-x-6 overflow-x-auto pb-1">
+            <div className="overflow-x-auto rounded-lg border border-teal-900/10 bg-white p-1 shadow-sm">
+              <div className="flex min-w-max items-center gap-1">
               {[
-                { id: "overview", label: "Easy Overview", icon: Sparkles },
-                { id: "dictionary", label: "Vocabulary Dictionary", icon: BookOpen },
-                { id: "flashcards", label: "Mnemonic Flashcards", icon: HelpCircle },
-                { id: "quiz", label: "Practice Quiz", icon: Check },
-                { id: "pdfContent", label: "Original Material", icon: FileText }
+                { id: "overview", label: "Overview", icon: Sparkles },
+                { id: "dictionary", label: "Dictionary", icon: BookOpen },
+                { id: "flashcards", label: "Flashcards", icon: HelpCircle },
+                { id: "quiz", label: "Quiz", icon: ClipboardCheck },
+                { id: "pdfContent", label: "Source", icon: FileText }
               ].map((tab) => {
                 const IconComp = tab.icon;
                 const isSelected = guideViewerTab === tab.id;
@@ -1276,64 +1359,65 @@ export default function App() {
                   <button
                     key={tab.id}
                     onClick={() => setGuideViewerTab(tab.id as any)}
-                    className={`flex items-center gap-1.5 py-3 text-xs sm:text-sm font-semibold transition border-b-2 whitespace-nowrap ${
+                    className={`flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-2 text-xs sm:text-sm font-bold transition-colors duration-200 whitespace-nowrap ${
                       isSelected
-                        ? "border-indigo-600 text-indigo-600 font-bold"
-                        : "border-transparent text-slate-500 hover:text-slate-800"
+                        ? "bg-[#EEF4EF] text-[#2F5D50]"
+                        : "text-slate-500 hover:bg-slate-50 hover:text-[#1F2933]"
                     }`}
                   >
-                    <IconComp class="w-4 h-4" /> {tab.label}
+                    <IconComp className="w-4 h-4" /> {tab.label}
                   </button>
                 );
               })}
+              </div>
             </div>
 
             {/* Sub-Views */}
             {guideViewerTab === "overview" && (
-              <div id="view-overview" class="grid grid-cols-1 md:grid-cols-12 gap-8">
+              <div id="view-overview" className="grid grid-cols-1 md:grid-cols-12 gap-6">
                 {/* Column 1: Core recap */}
-                <div class="md:col-span-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div className="md:col-span-8 bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-5">
                   <div>
-                    <h3 class="text-lg font-bold font-display text-slate-950">Curriculum Story Book</h3>
-                    <p class="text-slate-500 text-xs mt-1">Here is the whole lesson summed up in simple, straightforward storybook comparisons!</p>
+                    <h3 className="text-lg font-black text-[#1F2933]">Study Brief</h3>
+                    <p className="text-slate-500 text-xs mt-1">A plain-language recap generated from the uploaded material.</p>
                   </div>
-                  <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                  <p className="text-slate-700 text-sm leading-7 whitespace-pre-wrap bg-[#F8FAFC] p-5 rounded-lg border border-slate-100">
                     {activeGuide.summary}
                   </p>
 
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                    <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                      <h4 class="text-xs font-mono text-indigo-700 uppercase font-black tracking-wider mb-2">Memory Boost</h4>
-                      <p class="text-xs text-indigo-900 leading-relaxed">
-                        Flip over to the <strong>Mnemonic Flashcards</strong> tab to use custom memory visual associations for easy recall.
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="p-4 bg-[#EEF4EF] border border-teal-900/10 rounded-lg">
+                      <h4 className="text-xs font-mono text-[#2F5D50] uppercase font-black tracking-wider mb-2">Memory Boost</h4>
+                      <p className="text-xs text-[#1F2933] leading-relaxed">
+                        Flip to <strong>Flashcards</strong> for term-by-term mnemonic recall.
                       </p>
                     </div>
-                    <div class="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                      <h4 class="text-xs font-mono text-emerald-700 uppercase font-black tracking-wider mb-2">Self-Assessment</h4>
-                      <p class="text-xs text-emerald-900 leading-relaxed">
-                        Ready to shine? Jump onto the <strong>Practice Quiz</strong> to take simulated recall trial-runs.
+                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg">
+                      <h4 className="text-xs font-mono text-emerald-700 uppercase font-black tracking-wider mb-2">Self-Assessment</h4>
+                      <p className="text-xs text-orange-950 leading-relaxed">
+                        Use the <strong>Quiz</strong> tab to spot weak recall before the exam.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Column 2: Quick list review stats */}
-                <div class="md:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                  <h4 class="text-sm font-bold font-display text-slate-900 flex items-center gap-1.5 mb-2">
-                    <Lightbulb class="w-4 h-4 text-indigo-600" /> Exam Quick Facts
+                <div className="md:col-span-4 bg-white p-5 rounded-lg border border-teal-900/10 shadow-sm space-y-4">
+                  <h4 className="text-sm font-black text-[#1F2933] flex items-center gap-1.5 mb-2">
+                    <Lightbulb className="w-4 h-4 text-[#B45309]" /> Guide Facts
                   </h4>
-                  <div class="divide-y divide-slate-100">
-                    <div class="py-3 flex justify-between items-center text-xs">
-                      <span class="text-slate-400">Total Terms:</span>
-                      <span class="font-mono text-slate-800 font-semibold">{activeGuide.concepts.length} vocabulary words</span>
+                  <div className="divide-y divide-slate-100">
+                    <div className="py-3 flex justify-between items-center text-xs">
+                      <span className="text-slate-500">Total Terms</span>
+                      <span className="font-mono text-slate-800 font-semibold">{activeGuide.concepts.length} vocabulary words</span>
                     </div>
-                    <div class="py-3 flex justify-between items-center text-xs">
-                      <span class="text-slate-400">Quiz items:</span>
-                      <span class="font-mono text-slate-800 font-semibold">{activeGuide.quiz.length} practice questions</span>
+                    <div className="py-3 flex justify-between items-center text-xs">
+                      <span className="text-slate-500">Quiz Items</span>
+                      <span className="font-mono text-slate-800 font-semibold">{activeGuide.quiz.length} practice questions</span>
                     </div>
-                    <div class="py-3 flex justify-between items-center text-xs">
-                      <span class="text-slate-400">Word Level:</span>
-                      <span class="text-indigo-600 font-semibold uppercase font-mono text-[10px]">{activeGuide.level}</span>
+                    <div className="py-3 flex justify-between items-center text-xs">
+                      <span className="text-slate-500">Word Level</span>
+                      <span className="text-[#2F5D50] font-black uppercase font-mono text-[10px] text-right">{activeGuide.level}</span>
                     </div>
                   </div>
                 </div>
@@ -1342,33 +1426,36 @@ export default function App() {
 
             {/* Sub-View: Vocabulary Dictionary table of absolute terms */}
             {guideViewerTab === "dictionary" && (
-              <div id="view-dictionary" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-6">
+              <div id="view-dictionary" className="bg-white rounded-lg border border-teal-900/10 shadow-sm overflow-hidden p-5 sm:p-6 space-y-5">
                 <div>
-                  <h3 class="text-lg font-bold font-display text-slate-950">Definition Dictionary</h3>
-                  <p class="text-xs text-slate-500 mt-1">Exact phrasing and simplified conceptual analogies extracted from your lesson assets.</p>
+                  <h3 className="text-lg font-black text-[#1F2933]">Definition Dictionary</h3>
+                  <p className="text-xs text-slate-500 mt-1">Terms, mnemonics, analogies, and concrete examples extracted from the lesson.</p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3">
                   {activeGuide.concepts.map((concept, index) => (
-                    <div key={index} class="p-5 bg-slate-50 rounded-xl border border-slate-200/50 hover:bg-slate-100/50 transition">
-                      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <span class="text-base font-bold font-display text-slate-900 px-3 py-1 bg-white rounded-lg shadow-sm border border-slate-100 flex items-center gap-1.5">
-                          <Check class="w-4 h-4 text-indigo-600" /> {concept.exactWord}
+                    <div key={index} className="p-4 bg-[#F8FAFC] rounded-lg border border-slate-200/70 hover:border-[#2F5D50]/40 transition-colors duration-200">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <span className="text-sm font-black text-[#1F2933] px-3 py-1 bg-white rounded-md shadow-sm border border-slate-100 flex items-center gap-1.5">
+                          <Check className="w-4 h-4 text-[#2F5D50]" /> {concept.exactWord}
                         </span>
                         
                         {/* Mnemonic bubble badge */}
-                        <span class="text-[10px] font-semibold font-mono bg-amber-50 border border-amber-100 text-amber-800 px-2.5 py-1 rounded-full">
+                        <span className="text-[10px] font-semibold font-mono bg-orange-50 border border-orange-100 text-orange-900 px-2.5 py-1 rounded-full">
                           Memory Trick: "{concept.mnemonic}"
                         </span>
                       </div>
 
-                      <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
-                        <strong class="text-indigo-950 font-semibold">Easy Analogy:</strong> {concept.elementaryExplanation}
-                      </p>
+                      <div className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
+                        <p className="mt-1 font-semibold text-[#2F5D50]">From PDF</p>
+                        <p className="mt-0 font-semibold text-[#2F5D50]">{getConceptSourceMeaning(concept)}</p>
+                        <strong className="text-[#1F2933] font-bold">Easy Analogy</strong>
+                        <p className="mt-0">{concept.elementaryExplanation}</p>
+                      </div>
 
-                      <div class="p-3 bg-emerald-50/50 rounded-lg border border-emerald-100 text-xs text-emerald-800 flex gap-2">
-                        <span class="font-semibold select-none">Example:</span>
-                        <p class="italic">{concept.example}</p>
+                      <div className="p-3 bg-emerald-50/70 rounded-lg border border-emerald-100 text-xs text-emerald-800 flex gap-2">
+                        <span className="font-semibold select-none">Example:</span>
+                        <p className="italic">{concept.example}</p>
                       </div>
                     </div>
                   ))}
@@ -1378,11 +1465,11 @@ export default function App() {
 
             {/* Sub-View: Double Sided Flipping Flashcards */}
             {guideViewerTab === "flashcards" && (
-              <div id="view-flashcards" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div class="text-center max-w-sm mx-auto space-y-2">
-                  <h3 class="text-lg font-bold font-display text-slate-950">Mnemonic Flash Trainer</h3>
-                  <p class="text-slate-500 text-xs">
-                    Flip these interactive double-sided card segments to commit terms to your active memory bank!
+              <div id="view-flashcards" className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-5">
+                <div className="text-center max-w-sm mx-auto space-y-2">
+                  <h3 className="text-lg font-black text-[#1F2933]">Mnemonic Flash Trainer</h3>
+                  <p className="text-slate-500 text-xs">
+                    Flip each card to move from term recognition to active recall.
                   </p>
                 </div>
                 <FlashcardViewer concepts={activeGuide.concepts} />
@@ -1391,26 +1478,26 @@ export default function App() {
 
             {/* Sub-View: Interactive Assessment quiz */}
             {guideViewerTab === "quiz" && (
-              <div id="view-quiz" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+              <div id="view-quiz" className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-2">
                 <PracticeQuiz quiz={activeGuide.quiz} />
               </div>
             )}
 
             {/* Sub-View: PDF Source Markdown Content */}
             {guideViewerTab === "pdfContent" && (
-              <div id="view-pdf-content" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div id="view-pdf-content" className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-4">
                 <div>
-                  <h3 class="text-lg font-bold font-display text-slate-950">Original Lecture Material</h3>
-                  <p class="text-slate-500 text-xs">
+                  <h3 className="text-lg font-black text-[#1F2933]">Original Lecture Material</h3>
+                  <p className="text-slate-500 text-xs">
                     This is the raw, structured text captured from your course notes or syllabus document.
                   </p>
                 </div>
                 {activeGuide.originalMarkdown ? (
-                  <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 text-slate-700 text-sm font-sans whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
+                  <div className="p-5 bg-[#F8FAFC] rounded-lg border border-slate-200 text-slate-700 text-sm font-sans whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
                     {activeGuide.originalMarkdown}
                   </div>
                 ) : (
-                  <div class="p-6 text-center text-slate-400 text-xs italic bg-slate-50 rounded-2xl">
+                  <div className="p-6 text-center text-slate-500 text-xs italic bg-[#F8FAFC] rounded-lg">
                     No raw text stored for this study guide document.
                   </div>
                 )}
@@ -1421,81 +1508,85 @@ export default function App() {
 
         {/* STUDY HISTORICAL LOG SHEET */}
         {activeTab === "history" && (
-          <div id="history-panel" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 animate-fade-up">
-            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-slate-100 pb-5">
+          <div id="history-panel" className="bg-white p-5 sm:p-6 rounded-lg border border-teal-900/10 shadow-sm space-y-6 animate-fade-up">
+            <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h2 class="text-xl sm:text-2xl font-bold font-display text-slate-900 flex items-center gap-2">
-                  <History class="w-6 h-6 text-indigo-600" /> Saved Review Workspace Sheets
+                <h2 className="text-xl sm:text-2xl font-black text-[#1F2933] flex items-center gap-2">
+                  <History className="w-6 h-6 text-[#2F5D50]" /> Saved Reviewers
                 </h2>
-                <p class="text-slate-500 text-xs sm:text-sm mt-1">
-                  Revisit previously generated study advisors and review tests.
+                <p className="text-slate-500 text-xs sm:text-sm mt-1">
+                  Search and reopen generated guides for the current student profile.
                 </p>
               </div>
 
               {/* Quick Filter */}
-              <div class="relative w-full sm:w-64">
-                <Search class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
+              <div className="relative w-full sm:w-80">
+                <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                 <input
+                  aria-label="Search saved reviewers"
                   type="text"
                   value={searchHistoryQuery}
                   onChange={(e) => setSearchHistoryQuery(e.target.value)}
                   placeholder="Search reviewer sheets..."
-                  class="w-full pl-9 pr-4 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+                  className="w-full pl-9 pr-4 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] transition"
                 />
               </div>
             </div>
 
             {filteredHistoryGuides.length === 0 ? (
-              <div class="text-center py-16 space-y-3">
-                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 mx-auto rounded-full flex items-center justify-center">
-                  <FileText class="w-6 h-6" />
+              <div className="text-center py-16 space-y-3">
+                <div className="w-12 h-12 bg-[#EEF4EF] text-[#2F5D50] mx-auto rounded-lg flex items-center justify-center">
+                  <FileText className="w-6 h-6" />
                 </div>
-                <p class="text-sm text-slate-500 font-medium">No saved reviewers found for this student account.</p>
+                <p className="text-sm text-slate-500 font-medium">No saved reviewers found for this student account.</p>
                 <button
                   onClick={() => setActiveTab("workspace")}
-                  class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition shadow shadow-indigo-100"
+                  className="px-5 py-2.5 bg-[#2F5D50] hover:bg-[#254A40] text-white text-xs font-bold rounded-lg transition-colors duration-200 shadow-sm cursor-pointer"
                 >
-                  Create Your First Plan Reviewer
+                  Create First Reviewer
                 </button>
               </div>
             ) : (
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredHistoryGuides.map((guide) => (
                   <div 
                     key={guide.id}
-                    class="p-5 rounded-2xl border border-slate-250 bg-slate-50 hover:bg-white hover:border-indigo-400 hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
+                    className="p-5 rounded-lg border border-slate-200 bg-[#F8FAFC] hover:bg-white hover:border-[#2F5D50]/50 hover:shadow-md transition-colors duration-200 flex flex-col justify-between group"
                   >
-                    <div class="space-y-2">
-                      <div class="flex justify-between items-start gap-2">
-                        <span class="text-[10px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded uppercase">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="text-[10px] font-mono font-bold text-[#2F5D50] bg-[#EEF4EF] px-2 py-0.5 rounded uppercase">
                           {guide.examName}
                         </span>
                         <button
+                          type="button"
+                          aria-label={`Delete ${guide.title}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteGuide(guide.id);
                           }}
-                          className="text-slate-400 hover:text-rose-600 p-1 rounded transition text-xs font-semibold"
+                          className="text-slate-400 hover:text-rose-600 p-1 rounded transition-colors duration-200 text-xs font-bold cursor-pointer inline-flex items-center gap-1"
                         >
+                          <Trash2 className="w-3.5 h-3.5" />
                           Delete
                         </button>
                       </div>
 
-                      <h4 class="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors text-base font-display">
+                      <h4 className="font-black text-[#1F2933] group-hover:text-[#2F5D50] transition-colors duration-200 text-base">
                         {guide.title}
                       </h4>
-                      <p class="text-xs text-slate-500 line-clamp-2">
+                      <p className="text-xs text-slate-600 line-clamp-2 leading-5">
                         {guide.summary}
                       </p>
                     </div>
 
-                    <div class="mt-4 pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                      <span class="text-[10px] text-slate-400 font-mono">Created: {guide.createdDate}</span>
+                    <div className="mt-4 pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                      <span className="text-[10px] text-slate-500 font-mono">Created: {guide.createdDate}</span>
                       <button
                         onClick={() => handleSelectGuideFromHistory(guide)}
-                        class="text-xs text-indigo-600 group-hover:text-indigo-700 font-bold flex items-center gap-1"
+                        className="text-xs text-[#2F5D50] group-hover:text-[#254A40] font-black flex items-center gap-1 cursor-pointer"
                       >
-                        Launch Guide <ChevronRight class="w-3.5 h-3.5" />
+                        Launch Guide <ChevronRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
@@ -1507,10 +1598,10 @@ export default function App() {
       </main>
 
       {/* Floating Action Navigation (Footer Style) */}
-      <footer class="mt-auto bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-4 items-center justify-between text-xs text-slate-500">
+      <footer className="mt-auto bg-white border-t border-teal-900/10">
+        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-4 items-center justify-between text-xs text-slate-500">
           <div>
-            Collegiate Study Guide Reviewer MVP &bull; Undergraduate Study Companion
+            ReviewStack MVP &bull; Undergraduate study companion
           </div>
           <div>
             Secure local browser processing
@@ -1518,91 +1609,23 @@ export default function App() {
         </div>
       </footer>
 
-      {/* MODAL 1: ADD STUDENT ACCOUNT PROFILE */}
-      {showAddStudentModal && (
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 space-y-6 border border-slate-100 animate-fade-up">
-            <div class="flex justify-between items-start">
-              <div>
-                <h3 class="text-lg font-bold font-display text-slate-950 flex items-center gap-1.5">
-                  <UserCheck class="w-5 h-5 text-indigo-600" /> Create Student Profile
-                </h3>
-                <p class="text-xs text-slate-500 mt-1">Add a new local account profile for personalized saved charts.</p>
-              </div>
-              <button 
-                onClick={() => setShowAddStudentModal(false)}
-                class="text-slate-400 hover:text-slate-600 font-bold"
-              >
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateStudentProfile} class="space-y-4">
-              <div class="space-y-1.5">
-                <label class="text-xs font-semibold text-slate-600 uppercase">Student First Name</label>
-                <input
-                  type="text"
-                  required
-                  value={newStudentName}
-                  onChange={(e) => setNewStudentName(e.target.value)}
-                  placeholder="e.g. Liam Johnson"
-                  class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
-                />
-              </div>
-
-              <div class="space-y-1.5">
-                <label class="text-xs font-semibold text-slate-600 uppercase">Class Grade Level</label>
-                <select
-                  value={newStudentGrade}
-                  onChange={(e) => setNewStudentGrade(e.target.value)}
-                  class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer"
-                >
-                  <option value="1st Grade">1st Grade (Elementary)</option>
-                  <option value="2nd Grade">2nd Grade (Elementary)</option>
-                  <option value="3rd Grade">3rd Grade (Elementary)</option>
-                  <option value="4th Grade">4th Grade (Elementary)</option>
-                  <option value="5th Grade">5th Grade (Elementary)</option>
-                  <option value="6th Grade">6th Grade (Elementary)</option>
-                </select>
-              </div>
-
-              <div class="pt-2 flex justify-end gap-2.5 text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setShowAddStudentModal(false)}
-                  class="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition shadow shadow-indigo-100"
-                >
-                  Add Profile Account
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL 2: BUY STUDY CREDITS Simulative checkout */}
+      {/* MODAL: BUY STUDY CREDITS Simulative checkout */}
       {showCheckoutModal && (
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div class="bg-white rounded-3xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-100 animate-fade-up">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-xl overflow-hidden border border-teal-900/10 animate-fade-up">
             
-            <div class="grid grid-cols-1 md:grid-cols-12">
+            <div className="grid grid-cols-1 md:grid-cols-12">
               
               {/* Checkout pricing tiers */}
-              <div class="md:col-span-5 bg-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between">
+              <div className="md:col-span-5 bg-[#1F2933] text-white p-6 sm:p-8 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block mb-1">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-orange-200 font-bold block mb-1">
                     Buy Study Coins
                   </span>
-                  <h3 class="text-xl font-bold font-display text-white">Select Coin Tier</h3>
-                  <p class="text-xs text-slate-400 mt-1">Top up your balance instantly to generate study reviewers.</p>
+                  <h3 className="text-xl font-bold font-display text-white">Select Coin Tier</h3>
+                  <p className="text-xs text-slate-400 mt-1">Top up your balance instantly to generate study reviewers.</p>
 
-                  <div class="mt-6 space-y-3">
+                  <div className="mt-6 space-y-3">
                     {[
                       { name: "Starter Tier", price: 120, credits: 10, bonus: "Basic Pack" },
                       { name: "Super Pack", price: 520, credits: 50, bonus: "Popular Option!" },
@@ -1613,117 +1636,121 @@ export default function App() {
                         onClick={() => setSelectedPlan(pack)}
                         className={`w-full text-left p-3 rounded-xl border-2 transition-all flex flex-col justify-center ${
                           selectedPlan?.name === pack.name
-                            ? "border-indigo-400 bg-indigo-600/30 text-white"
-                            : "border-slate-800 text-slate-400 hover:border-slate-705"
+                            ? "border-orange-300 bg-white/15 text-white"
+                            : "border-white/10 text-teal-100 hover:border-white/35"
                         }`}
                       >
-                        <div class="flex justify-between items-center w-full">
-                          <span class="text-xs font-semibold text-white">{pack.name}</span>
-                          <span class="text-xs font-bold text-indigo-400">₱{pack.price}</span>
+                        <div className="flex justify-between items-center w-full">
+                          <span className="text-xs font-semibold text-white">{pack.name}</span>
+                          <span className="text-xs font-bold text-orange-200">₱{pack.price}</span>
                         </div>
-                        <div class="flex justify-between items-center w-full mt-1.5 text-[10px]">
+                        <div className="flex justify-between items-center w-full mt-1.5 text-[10px]">
                           <span>{pack.credits} Coins</span>
-                          <span class="text-indigo-400 italic leading-none">{pack.bonus}</span>
+                          <span className="text-orange-200 italic leading-none">{pack.bonus}</span>
                         </div>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 pt-6 border-t border-slate-800/60 font-mono mt-6 leading-relaxed">
+                <div className="text-[10px] text-slate-500 pt-6 border-t border-slate-800/60 font-mono mt-6 leading-relaxed">
                   Mock purchase workspace for MVP phase. No actual charges levied.
                 </div>
               </div>
 
               {/* simulated forms box */}
-              <div class="md:col-span-7 p-6 sm:p-8 space-y-6">
-                <div class="flex justify-between items-start">
+              <div className="md:col-span-7 p-6 sm:p-8 space-y-6">
+                <div className="flex justify-between items-start">
                   <div>
-                    <h4 class="text-base font-bold font-display text-slate-900">Credit Card Gateway</h4>
-                    <p class="text-xs text-slate-500 mt-1">Safe simulative sandbox checkout panel.</p>
+                    <h4 className="text-base font-bold font-display text-slate-900">Credit Card Gateway</h4>
+                    <p className="text-xs text-slate-500 mt-1">Safe simulative sandbox checkout panel.</p>
                   </div>
                   <button 
                     onClick={() => {
                       setShowCheckoutModal(false);
                       setSelectedPlan(null);
                     }}
-                    class="text-slate-400 hover:text-slate-600 font-bold"
+                    className="text-slate-400 hover:text-slate-600 font-bold"
                   >
                     &times;
                   </button>
                 </div>
 
                 {paymentSuccess ? (
-                  <div class="h-64 flex flex-col items-center justify-center text-center space-y-3">
-                    <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
+                  <div className="h-64 flex flex-col items-center justify-center text-center space-y-3">
+                    <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
                       <Check className="w-8 h-8 animate-bounce" />
                     </div>
-                    <div class="space-y-1">
-                      <h5 class="text-base font-bold text-slate-950">Payment Successful!</h5>
-                      <p class="text-xs text-slate-500">
+                    <div className="space-y-1">
+                      <h5 className="text-base font-bold text-slate-950">Payment Successful!</h5>
+                      <p className="text-xs text-slate-500">
                         Added <strong>{selectedPlan?.credits} Study Coins</strong> to {activeStudent?.name} successfully!
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSimulatedPayment} class="space-y-4">
+                  <form onSubmit={handleSimulatedPayment} className="space-y-4">
                     {/* card specs */}
-                    <div class="space-y-1.5">
-                      <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Card Number</label>
-                      <div class="relative">
+                    <div className="space-y-1.5">
+                      <label htmlFor="checkout-card-number" className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Card Number</label>
+                      <div className="relative">
                         <input
+                          id="checkout-card-number"
                           type="text"
                           required
                           maxLength={19}
                           value={cardNumber}
                           onChange={(e) => setCardNumber(e.target.value.replace(/\s?/g, '').replace(/(\d{4})/g, '$1 ').trim())}
                           placeholder="4111 2222 3333 4444"
-                          class="w-full text-xs p-3 pl-10 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+                          className="w-full text-xs p-3 pl-10 border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition"
                         />
-                        <CreditCard class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
+                        <CreditCard className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                       </div>
                     </div>
 
-                    <div class="space-y-1.5">
-                      <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Cardholder Name</label>
+                    <div className="space-y-1.5">
+                      <label htmlFor="checkout-card-holder" className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Cardholder Name</label>
                       <input
+                        id="checkout-card-holder"
                         type="text"
                         required
                         value={cardHolder}
                         onChange={(e) => setCardHolder(e.target.value)}
                         placeholder="ALEX JOHNSON"
-                        class="w-full text-xs p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition uppercase"
+                        className="w-full text-xs p-3 border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition uppercase"
                       />
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                      <div class="space-y-1.5">
-                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Expiry Date</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label htmlFor="checkout-card-expiry" className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Expiry Date</label>
                         <input
+                          id="checkout-card-expiry"
                           type="text"
                           required
                           maxLength={5}
                           value={cardExpiry}
                           onChange={(e) => setCardExpiry(e.target.value)}
                           placeholder="MM/YY"
-                          class="w-full text-xs p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition text-center"
+                          className="w-full text-xs p-3 border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition text-center"
                         />
                       </div>
-                      <div class="space-y-1.5">
-                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">CVV</label>
+                      <div className="space-y-1.5">
+                        <label htmlFor="checkout-card-cvv" className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">CVV</label>
                         <input
+                          id="checkout-card-cvv"
                           type="password"
                           required
                           maxLength={3}
                           value={cardCvv}
                           onChange={(e) => setCardCvv(e.target.value)}
                           placeholder="123"
-                          class="w-full text-xs p-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition text-center"
+                          className="w-full text-xs p-3 border border-slate-200 rounded-lg bg-[#F8FAFC] focus:outline-none focus:ring-2 focus:ring-[#2F5D50] focus:bg-white transition text-center"
                         />
                       </div>
                     </div>
 
-                    <div class="pt-3">
+                    <div className="pt-3">
                       <button
                         type="submit"
                         disabled={isProcessingPayment || !selectedPlan}
@@ -1731,13 +1758,13 @@ export default function App() {
                           !selectedPlan 
                             ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
                             : isProcessingPayment 
-                              ? "bg-indigo-400 cursor-not-allowed" 
-                              : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg"
+                              ? "bg-[#2F5D50]/60 cursor-not-allowed" 
+                              : "bg-[#B45309] hover:bg-[#92400E] hover:shadow-lg cursor-pointer"
                         }`}
                       >
                         {isProcessingPayment ? (
                           <>
-                            <Loader2 class="w-4 h-4 animate-spin" /> Authorizing simulation...
+                            <Loader2 className="w-4 h-4 animate-spin" /> Authorizing simulation...
                           </>
                         ) : (
                           <>
