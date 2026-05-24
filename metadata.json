@@ -1,0 +1,6 @@
+{
+  "name": "ReviewStack",
+  "description": "An MVP study advisor for undergraduate students that parses PDF lesson plans client-side and transforms curriculum details into high-yield reviewers with exact terminology and analogies. Includes student account registration, credit management, and simulated coin top-ups.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
